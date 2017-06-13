@@ -1,0 +1,164 @@
+fileFormatVersion: 2
+guid: 1ee9a7c3b79ca2b40a7730f091529a3c
+timeCreated: 1490231097
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Object008
+    100002: Object009
+    100004: Object010
+    100006: Object011
+    100008: Object012
+    100010: Object014
+    100012: //RootNode
+    100014: Shuttle_Body
+    100016: Shuttle_FuelTank
+    100018: Shuttle_FuelThruster1
+    100020: Shuttle_FuelThruster2
+    100022: Shuttle_Wing1
+    100024: Shuttle_Wing2
+    100026: FuelTruster_Flame001
+    100028: FuelTruster_Flame002
+    100030: ShuttleTruster_Flame001
+    100032: ShuttleTruster_Flame002
+    100034: ShuttleTruster_Flame003
+    400000: Object008
+    400002: Object009
+    400004: Object010
+    400006: Object011
+    400008: Object012
+    400010: Object014
+    400012: //RootNode
+    400014: Shuttle_Body
+    400016: Shuttle_FuelTank
+    400018: Shuttle_FuelThruster1
+    400020: Shuttle_FuelThruster2
+    400022: Shuttle_Wing1
+    400024: Shuttle_Wing2
+    400026: FuelTruster_Flame001
+    400028: FuelTruster_Flame002
+    400030: ShuttleTruster_Flame001
+    400032: ShuttleTruster_Flame002
+    400034: ShuttleTruster_Flame003
+    2300000: Object008
+    2300002: Object009
+    2300004: Object010
+    2300006: Object011
+    2300008: Object012
+    2300010: Object014
+    2300012: Shuttle_Body
+    2300014: Shuttle_FuelTank
+    2300016: Shuttle_FuelThruster1
+    2300018: Shuttle_FuelThruster2
+    2300020: Shuttle_Wing1
+    2300022: Shuttle_Wing2
+    2300024: FuelTruster_Flame001
+    2300026: FuelTruster_Flame002
+    2300028: ShuttleTruster_Flame001
+    2300030: ShuttleTruster_Flame002
+    2300032: ShuttleTruster_Flame003
+    3300000: Object008
+    3300002: Object009
+    3300004: Object010
+    3300006: Object011
+    3300008: Object012
+    3300010: Object014
+    3300012: Shuttle_Body
+    3300014: Shuttle_FuelTank
+    3300016: Shuttle_FuelThruster1
+    3300018: Shuttle_FuelThruster2
+    3300020: Shuttle_Wing1
+    3300022: Shuttle_Wing2
+    3300024: FuelTruster_Flame001
+    3300026: FuelTruster_Flame002
+    3300028: ShuttleTruster_Flame001
+    3300030: ShuttleTruster_Flame002
+    3300032: ShuttleTruster_Flame003
+    4300000: Shuttle_Body
+    4300002: Object008
+    4300004: Object009
+    4300006: Object010
+    4300008: Object011
+    4300010: Object012
+    4300012: Object014
+    4300014: Shuttle_Wing1
+    4300016: Shuttle_Wing2
+    4300018: Shuttle_FuelThruster1
+    4300020: Shuttle_FuelTank
+    4300022: Shuttle_FuelThruster2
+    4300024: ShuttleTruster_Flame002
+    4300026: ShuttleTruster_Flame003
+    4300028: ShuttleTruster_Flame001
+    4300030: FuelTruster_Flame002
+    4300032: FuelTruster_Flame001
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,175 @@
+fileFormatVersion: 2
+guid: 8ec17ff9a9093c745b6538e5e530fcb5
+timeCreated: 1490637529
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Interior_Floors
+    100004: Interior_HolocadLogo
+    100006: Interior_Puzzle_Mining
+    100008: Interior_Puzzle_SciFi
+    100010: Interior_Puzzle_Storage
+    100012: Mining_Interior_Platform
+    100014: RocketRoom_Interior_Shell
+    100016: SciFi_Interior_PipeBundle
+    100018: SciFi_Interior_Platform
+    100020: SciFi_Interior_PlatformGrates
+    100022: SciFi_Interior_PlatformRails
+    100024: Storage_Interior_Crates2
+    100026: Storage_Interior_Hall
+    100028: Storage_Interior_Platform
+    100030: Storage_Interior_Platform_Grate
+    100032: Storage_Interior_Platform_Rails
+    400000: //RootNode
+    400002: Interior_Floors
+    400004: Interior_HolocadLogo
+    400006: Interior_Puzzle_Mining
+    400008: Interior_Puzzle_SciFi
+    400010: Interior_Puzzle_Storage
+    400012: Mining_Interior_Platform
+    400014: RocketRoom_Interior_Shell
+    400016: SciFi_Interior_PipeBundle
+    400018: SciFi_Interior_Platform
+    400020: SciFi_Interior_PlatformGrates
+    400022: SciFi_Interior_PlatformRails
+    400024: Storage_Interior_Crates2
+    400026: Storage_Interior_Hall
+    400028: Storage_Interior_Platform
+    400030: Storage_Interior_Platform_Grate
+    400032: Storage_Interior_Platform_Rails
+    2300000: Interior_Floors
+    2300002: Interior_HolocadLogo
+    2300004: Interior_Puzzle_Mining
+    2300006: Interior_Puzzle_SciFi
+    2300008: Interior_Puzzle_Storage
+    2300010: Mining_Interior_Platform
+    2300012: RocketRoom_Interior_Shell
+    2300014: SciFi_Interior_PipeBundle
+    2300016: SciFi_Interior_Platform
+    2300018: SciFi_Interior_PlatformGrates
+    2300020: SciFi_Interior_PlatformRails
+    2300022: Storage_Interior_Crates2
+    2300024: Storage_Interior_Hall
+    2300026: Storage_Interior_Platform
+    2300028: Storage_Interior_Platform_Grate
+    2300030: Storage_Interior_Platform_Rails
+    3300000: Interior_Floors
+    3300002: Interior_HolocadLogo
+    3300004: Interior_Puzzle_Mining
+    3300006: Interior_Puzzle_SciFi
+    3300008: Interior_Puzzle_Storage
+    3300010: Mining_Interior_Platform
+    3300012: RocketRoom_Interior_Shell
+    3300014: SciFi_Interior_PipeBundle
+    3300016: SciFi_Interior_Platform
+    3300018: SciFi_Interior_PlatformGrates
+    3300020: SciFi_Interior_PlatformRails
+    3300022: Storage_Interior_Crates2
+    3300024: Storage_Interior_Hall
+    3300026: Storage_Interior_Platform
+    3300028: Storage_Interior_Platform_Grate
+    3300030: Storage_Interior_Platform_Rails
+    4300000: RocketRoom_Interior_Shell
+    4300002: Mining_Interior_Platform
+    4300004: SciFi_Interior_PlatformGrates
+    4300006: Interior_Floors
+    4300008: SciFi_Interior_PlatformRails
+    4300010: Storage_Interior_Platform
+    4300012: Storage_Interior_Platform_Grate
+    4300014: Storage_Interior_Platform_Rails
+    4300016: SciFi_Interior_PipeBundle
+    4300018: Storage_Interior_Crates2
+    4300020: Storage_Interior_Hall
+    4300022: SciFi_Interior_Platform
+    4300024: Interior_HolocadLogo
+    4300026: Interior_Puzzle_Storage
+    4300028: Interior_Puzzle_Mining
+    4300030: Interior_Puzzle_SciFi
+    6400000: Interior_Floors
+    6400002: Interior_HolocadLogo
+    6400004: Interior_Puzzle_Mining
+    6400006: Interior_Puzzle_SciFi
+    6400008: Interior_Puzzle_Storage
+    6400010: Mining_Interior_Platform
+    6400012: RocketRoom_Interior_Shell
+    6400014: SciFi_Interior_PipeBundle
+    6400016: SciFi_Interior_Platform
+    6400018: SciFi_Interior_PlatformGrates
+    6400020: SciFi_Interior_PlatformRails
+    6400022: Storage_Interior_Crates2
+    6400024: Storage_Interior_Hall
+    6400026: Storage_Interior_Platform
+    6400028: Storage_Interior_Platform_Grate
+    6400030: Storage_Interior_Platform_Rails
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 1
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
