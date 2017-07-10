@@ -2,9 +2,9 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using UnityEngine;
-using UnityEngine.VR.WSA.Persistence;
+using UnityEngine.XR.WSA.Persistence;
 using System.Collections.Generic;
-using UnityEngine.VR.WSA;
+using UnityEngine.XR.WSA;
 
 namespace HoloToolkit.Unity
 {

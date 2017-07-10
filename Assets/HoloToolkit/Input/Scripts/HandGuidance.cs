@@ -2,7 +2,7 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using UnityEngine;
-using UnityEngine.VR.WSA.Input;
+using UnityEngine.XR.WSA.Input;
 
 namespace HoloToolkit.Unity.InputModule
 {
@@ -54,62 +54,22 @@ namespace HoloToolkit.Unity.InputModule
 
             // Register for hand and finger events to know where your hand
             // is being tracked and what state it is in.
-            InteractionManager.SourceLost += InteractionManager_SourceLost;
-            InteractionManager.SourceUpdated += InteractionManager_SourceUpdated;
-            InteractionManager.SourceReleased += InteractionManager_SourceReleased;
+            InteractionManager.OnSourceLost += InteractionManager_OnSourceLost;
+            InteractionManager.OnSourceUpdated += InteractionManager_OnSourceUpdated;
+            InteractionManager.OnSourceReleased += InteractionManager_OnSourceReleased;
         }
 
-        private void ShowHandGuidanceIndicator(InteractionSourceState hand)
+        private void InteractionManager_OnSourceReleased(SourceReleasedEventArgs obj)
         {
-            if (!currentlyTrackedHand.HasValue)
-            {
-                return;
-            }
-
-            // Get the position and rotation of the hand guidance indicator and display the indicator object.
-            if (handGuidanceIndicatorGameObject != null)
-            {
-                Vector3 position;
-                Quaternion rotation;
-                GetIndicatorPositionAndRotation(hand, out position, out rotation);
-
-                handGuidanceIndicatorGameObject.transform.position = position;
-                handGuidanceIndicatorGameObject.transform.rotation = rotation * defaultHandGuidanceRotation;
-                handGuidanceIndicatorGameObject.SetActive(true);
-            }
+            RemoveTrackedHand(obj.state);
         }
 
-        private void HideHandGuidanceIndicator(InteractionSourceState hand)
+        private void InteractionManager_OnSourceUpdated(SourceUpdatedEventArgs obj)
         {
-            if (!currentlyTrackedHand.HasValue)
-            {
-                return;
-            }
-
-            if (handGuidanceIndicatorGameObject != null)
-            {
-                handGuidanceIndicatorGameObject.SetActive(false);
-            }
-        }
-
-        private void GetIndicatorPositionAndRotation(InteractionSourceState hand, out Vector3 position, out Quaternion rotation)
-        {
-            // Update the distance from IndicatorParent based on the user's hand's distance from the center of the view.
-            // Bound this distance by this maxDistanceFromCenter field, in meters.
-            const float maxDistanceFromCenter = 0.3f;
-            float distanceFromCenter = (float)(hand.properties.sourceLossRisk * maxDistanceFromCenter);
-
-            // Subtract direction from origin so that the indicator is between the hand and the origin.
-            position = Cursor.transform.position - hand.properties.sourceLossMitigationDirection * distanceFromCenter;
-            rotation = Quaternion.LookRotation(Camera.main.transform.forward, hand.properties.sourceLossMitigationDirection);
-        }
-
-        private void InteractionManager_SourceUpdated(InteractionManager.SourceEventArgs obj)
-        {
-            InteractionSourceState sourceState = obj.state;
+            UnityEngine.XR.WSA.Input.InteractionSourceState sourceState = obj.state;
 
             // Only display hand indicators when we are in a holding state, since hands going out of view will affect any active gestures.
-            if (!sourceState.pressed)
+            if (!sourceState.anyPressed)
             {
                 return;
             }
@@ -136,19 +96,57 @@ namespace HoloToolkit.Unity.InputModule
             }
         }
 
-        private void InteractionManager_SourceReleased(InteractionManager.SourceEventArgs obj)
+        private void InteractionManager_OnSourceLost(SourceLostEventArgs obj)
         {
-            // Stop displaying the guidance indicator when the user releases their finger from the pressed state.
             RemoveTrackedHand(obj.state);
         }
 
-        private void InteractionManager_SourceLost(InteractionManager.SourceEventArgs obj)
+        private void ShowHandGuidanceIndicator(UnityEngine.XR.WSA.Input.InteractionSourceState hand)
         {
-            // Stop displaying the guidance indicator when the user's hand leaves the view.
-            RemoveTrackedHand(obj.state);
+            if (!currentlyTrackedHand.HasValue)
+            {
+                return;
+            }
+
+            // Get the position and rotation of the hand guidance indicator and display the indicator object.
+            if (handGuidanceIndicatorGameObject != null)
+            {
+                Vector3 position;
+                Quaternion rotation;
+                GetIndicatorPositionAndRotation(hand, out position, out rotation);
+
+                handGuidanceIndicatorGameObject.transform.position = position;
+                handGuidanceIndicatorGameObject.transform.rotation = rotation * defaultHandGuidanceRotation;
+                handGuidanceIndicatorGameObject.SetActive(true);
+            }
         }
 
-        private void RemoveTrackedHand(InteractionSourceState hand)
+        private void HideHandGuidanceIndicator(UnityEngine.XR.WSA.Input.InteractionSourceState hand)
+        {
+            if (!currentlyTrackedHand.HasValue)
+            {
+                return;
+            }
+
+            if (handGuidanceIndicatorGameObject != null)
+            {
+                handGuidanceIndicatorGameObject.SetActive(false);
+            }
+        }
+
+        private void GetIndicatorPositionAndRotation(UnityEngine.XR.WSA.Input.InteractionSourceState hand, out Vector3 position, out Quaternion rotation)
+        {
+            // Update the distance from IndicatorParent based on the user's hand's distance from the center of the view.
+            // Bound this distance by this maxDistanceFromCenter field, in meters.
+            const float maxDistanceFromCenter = 0.3f;
+            float distanceFromCenter = (float)(hand.properties.sourceLossRisk * maxDistanceFromCenter);
+
+            // Subtract direction from origin so that the indicator is between the hand and the origin.
+            position = Cursor.transform.position - hand.properties.sourceLossMitigationDirection * distanceFromCenter;
+            rotation = Quaternion.LookRotation(Camera.main.transform.forward, hand.properties.sourceLossMitigationDirection);
+        }
+
+        private void RemoveTrackedHand(UnityEngine.XR.WSA.Input.InteractionSourceState hand)
         {
             // Only remove a hand if we are currently tracking a hand, and the hand to remove matches this tracked hand.
             if (currentlyTrackedHand.HasValue && currentlyTrackedHand.Value == hand.source.id)
@@ -161,11 +159,14 @@ namespace HoloToolkit.Unity.InputModule
 
         protected override void OnDestroy()
         {
-            InteractionManager.SourceLost -= InteractionManager_SourceLost;
-            InteractionManager.SourceUpdated -= InteractionManager_SourceUpdated;
-            InteractionManager.SourceReleased -= InteractionManager_SourceReleased;
+            
+            UnityEngine.XR.WSA.Input.InteractionManager.OnSourceLost -= InteractionManager_OnSourceLost;
+            UnityEngine.XR.WSA.Input.InteractionManager.OnSourceUpdated -= InteractionManager_OnSourceUpdated;
+            UnityEngine.XR.WSA.Input.InteractionManager.OnSourceReleased -= InteractionManager_OnSourceReleased;
 
             base.OnDestroy();
         }
+
+        
     }
 }

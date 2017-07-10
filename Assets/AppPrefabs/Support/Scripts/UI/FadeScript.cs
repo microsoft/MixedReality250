@@ -32,14 +32,15 @@ public class FadeScript : SingleInstance<FadeScript> {
     // Use this for initialization
     void Start ()
     {
-        if (UnityEngine.VR.WSA.HolographicSettings.IsDisplayOpaque == false)
+        currentState = FadeState.idle;
+
+        if (UnityEngine.XR.WSA.HolographicSettings.IsDisplayOpaque == false)
         {
             GetComponentInChildren<MeshRenderer>().enabled = false;
             Debug.Log("removing unnecessary full screen effect from hololens");
             return;
         }
-
-        currentState = FadeState.idle;
+        
         fadeMaterial = GetComponentInChildren<MeshRenderer>().material;
 	}
 	

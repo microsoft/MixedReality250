@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.VR.WSA;
+using UnityEngine.XR.WSA;
 using HoloToolkit.Unity.InputModule;
 
 namespace HoloToolkit.Unity.Playspace
@@ -19,7 +19,7 @@ namespace HoloToolkit.Unity.Playspace
         [Tooltip("Material used to draw bounds for play space. Leave empty if you have not setup your play space or don't want to render bounds.")]
         public Material PlayspaceBoundsMaterial;
 
-        StageRoot stageRoot = null;
+
 #pragma warning disable 0414
         bool updatePlayspaceBounds = true;
 #pragma warning disable 0414
@@ -60,17 +60,12 @@ namespace HoloToolkit.Unity.Playspace
 
         private void Start()
         {
-            stageRoot = GetComponent<StageRoot>();
-            if (stageRoot == null)
-            {
-                Debug.Log("Adding a StageRoot component to the game object.");
-                stageRoot = gameObject.AddComponent<StageRoot>();                
-            }
-            stageRoot.OnTrackingChanged += StageRoot_OnTrackingChanged;
+            WorldManager.OnPositionalLocatorStateChanged += WorldManager_OnPositionalLocatorStateChanged;
+            
 
             // Render the floor as a child of the StageRoot component.
-            if (FloorQuad != null && stageRoot != null &&
-                HolographicSettings.IsDisplayOpaque)
+            if (FloorQuad != null &&
+                UnityEngine.XR.WSA.HolographicSettings.IsDisplayOpaque)
             {
                 floorQuadInstance = GameObject.Instantiate(FloorQuad);
                 floorQuadInstance.SetActive(true);
@@ -92,13 +87,14 @@ namespace HoloToolkit.Unity.Playspace
             }
         }
 
-        private void StageRoot_OnTrackingChanged(StageRoot self, bool located)
+        private void WorldManager_OnPositionalLocatorStateChanged(PositionalLocatorState oldState, PositionalLocatorState newState)
         {
-            Debug.Log("Stage root tracking changed " + located);
+            Debug.Log("Stage root tracking changed " + oldState.ToString() + " "+newState.ToString());
             // Hide the floor if tracking is lost or if StageRoot can't be located.
             if (floorQuadInstance != null &&
-                HolographicSettings.IsDisplayOpaque)
+                UnityEngine.XR.WSA.HolographicSettings.IsDisplayOpaque)
             {
+                bool located = newState == PositionalLocatorState.Active;
                 floorQuadInstance.SetActive((located && renderPlaySpace));
                 if (located)
                 {
@@ -125,13 +121,14 @@ namespace HoloToolkit.Unity.Playspace
         {
             RemoveBoundingBox();
 
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
             Vector3[] bounds = EditorLines;
             bool tryGetBoundsSuccess =true;
-#else
-            Vector3[] bounds = null;
-            bool tryGetBoundsSuccess = stageRoot.TryGetBounds(out bounds);
-#endif
+//#else
+//            Vector3[] bounds = null;
+//            bool tryGetBoundsSuccess = stageRoot.TryGetBounds(out bounds);
+//#endif
+            
             if (tryGetBoundsSuccess && bounds != null && bounds.Length > 1)
             {
                 if (PlayspaceBoundsMaterial != null)

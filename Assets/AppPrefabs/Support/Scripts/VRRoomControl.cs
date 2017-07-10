@@ -12,7 +12,7 @@ public class VRRoomControl : SingleInstance<VRRoomControl>
 
     void Start () {
         
-        if (UnityEngine.VR.WSA.HolographicSettings.IsDisplayOpaque == false)
+        if (UnityEngine.XR.WSA.HolographicSettings.IsDisplayOpaque == false)
         {
             Debug.Log("Not an immersive display so we'll use spatial mapping instead of this fake world");
             Destroy(this.gameObject);

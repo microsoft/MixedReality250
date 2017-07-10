@@ -4,7 +4,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.VR.WSA.Input;
+using UnityEngine.XR.WSA;
+using UnityEngine.XR.WSA.Input;
 
 namespace HoloToolkit.Unity.InputModule
 {
@@ -251,7 +252,7 @@ namespace HoloToolkit.Unity.InputModule
             // Select button pressed/released events
             if (editorControllerData.SelectButtonStateChanged)
             {
-                SourceButtonEventArgs buttonArgs = new SourceButtonEventArgs(this, editorControllerData.ControllerId, InteractionPressKind.Select);
+                SourceButtonEventArgs buttonArgs = new SourceButtonEventArgs(this, editorControllerData.ControllerId, InteractionSourcePressType.Select);
 
                 if (editorControllerData.IsSelectButtonDown)
                 {
@@ -273,7 +274,7 @@ namespace HoloToolkit.Unity.InputModule
 
             if (editorControllerData.MenuButtonStateChanged)
             {
-                SourceButtonEventArgs buttonArgs = new SourceButtonEventArgs(this, editorControllerData.ControllerId, InteractionPressKind.Menu);
+                SourceButtonEventArgs buttonArgs = new SourceButtonEventArgs(this, editorControllerData.ControllerId, InteractionSourcePressType.Menu);
 
                 if (editorControllerData.IsMenuButtonDown)
                 {
@@ -287,7 +288,7 @@ namespace HoloToolkit.Unity.InputModule
 
             if (editorControllerData.GraspStateChanged)
             {
-                SourceButtonEventArgs buttonArgs = new SourceButtonEventArgs(this, editorControllerData.ControllerId, InteractionPressKind.Grasp);
+                SourceButtonEventArgs buttonArgs = new SourceButtonEventArgs(this, editorControllerData.ControllerId, InteractionSourcePressType.Grasp);
 
                 if (editorControllerData.IsGrasped)
                 {

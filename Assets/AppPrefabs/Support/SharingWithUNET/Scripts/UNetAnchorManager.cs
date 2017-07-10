@@ -5,9 +5,9 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Networking;
 using HoloToolkit.Unity;
-using UnityEngine.VR.WSA.Sharing;
-using UnityEngine.VR.WSA;
-using UnityEngine.VR.WSA.Persistence;
+using UnityEngine.XR.WSA;
+using UnityEngine.XR.WSA.Sharing;
+
 using System;
 
 namespace HoloToolkit.Examples.SharingWithUNET
@@ -157,7 +157,7 @@ namespace HoloToolkit.Examples.SharingWithUNET
                 return;
             }
 
-            if (UnityEngine.VR.WSA.HolographicSettings.IsDisplayOpaque)
+            if (UnityEngine.XR.WSA.HolographicSettings.IsDisplayOpaque)
             {
                 AnchorEstablished = true;
             }
@@ -170,7 +170,7 @@ namespace HoloToolkit.Examples.SharingWithUNET
         private void Update()
         {
 #if WINDOWS_UWP
-            if (UnityEngine.VR.WSA.HolographicSettings.IsDisplayOpaque)
+            if (UnityEngine.XR.WSA.HolographicSettings.IsDisplayOpaque)
             {
                 return;
             }
@@ -260,7 +260,7 @@ namespace HoloToolkit.Examples.SharingWithUNET
                 return false;
             }
             
-            WorldAnchorStore anchorStore = WorldAnchorManager.Instance.AnchorStore;
+            UnityEngine.XR.WSA.Persistence.WorldAnchorStore anchorStore = WorldAnchorManager.Instance.AnchorStore;
             Debug.Log("Looking for " + CachedAnchorName);
             string[] ids = anchorStore.GetAllIds();
             for (int index = 0; index < ids.Length; index++)

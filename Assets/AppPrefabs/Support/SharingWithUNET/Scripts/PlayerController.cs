@@ -4,7 +4,7 @@
 using UnityEngine;
 using UnityEngine.Networking;
 using HoloToolkit.Unity.InputModule;
-using UnityEngine.VR.WSA.Input;
+
 
 namespace HoloToolkit.Examples.SharingWithUNET
 {
@@ -134,7 +134,7 @@ namespace HoloToolkit.Examples.SharingWithUNET
             if (isLocalPlayer)
             {
                 levelState.SetPathIndex(PathIndex);
-                if (PathIndex == -1 && UnityEngine.VR.WSA.HolographicSettings.IsDisplayOpaque)
+                if (PathIndex == -1 && UnityEngine.XR.WSA.HolographicSettings.IsDisplayOpaque)
                 {
                     Debug.Log("Getting in line");
                     WaitingForFreePath = true;
@@ -299,7 +299,7 @@ namespace HoloToolkit.Examples.SharingWithUNET
                 Debug.LogFormat("Set local player name {0} ip {1}", networkDiscovery.broadcastData, networkDiscovery.LocalIp);
                 CmdSetPlayerName(networkDiscovery.broadcastData);
                 CmdSetPlayerIp(networkDiscovery.LocalIp);
-                bool opaqueDisplay = UnityEngine.VR.WSA.HolographicSettings.IsDisplayOpaque;
+                bool opaqueDisplay = UnityEngine.XR.WSA.HolographicSettings.IsDisplayOpaque;
                 Debug.LogFormat("local player {0} share anchors ", (opaqueDisplay ? "does not" : "does"));
                 CmdSetCanShareAnchors(!opaqueDisplay);
 
@@ -384,6 +384,7 @@ namespace HoloToolkit.Examples.SharingWithUNET
             if (AnchorEstablished != anchorManager.AnchorEstablished)
             {
                 CmdSendAnchorEstablished(anchorManager.AnchorEstablished);
+                AnchorEstablished = anchorManager.AnchorEstablished;
             }
 
             if (AnchorEstablished == false)
@@ -424,14 +425,14 @@ namespace HoloToolkit.Examples.SharingWithUNET
         {
             if (isLocalPlayer)
             {
-                InteractionSourceState[] sources = InteractionManager.GetCurrentReading();
+                UnityEngine.XR.WSA.Input.InteractionSourceState[] sources = UnityEngine.XR.WSA.Input.InteractionManager.GetCurrentReading();
                 if (sources != null && sources.Length == 2)
                 {
-                    if (sources[0].source.sourceKind== InteractionSourceKind.Hand && sources[1].source.sourceKind == InteractionSourceKind.Hand)
+                    if (sources[0].source.kind == UnityEngine.XR.WSA.Input.InteractionSourceKind.Hand && sources[1].source.kind == UnityEngine.XR.WSA.Input.InteractionSourceKind.Hand)
                     {
                         Vector3 p1 = Vector3.zero;
                         Vector3 p2 = Vector3.zero;
-                        if (sources[0].sourcePose.TryGetPosition(out p1) && sources[1].sourcePose.TryGetPosition(out p2)
+                        if (sources[0].properties.location.pointer.TryGetPosition(out p1) && sources[1].properties.location.pointer.TryGetPosition(out p2)
                             && p1 != Vector3.zero && p2 != Vector3.zero)
                         {
                             float distBetweenHands = (p1 - p2).magnitude;

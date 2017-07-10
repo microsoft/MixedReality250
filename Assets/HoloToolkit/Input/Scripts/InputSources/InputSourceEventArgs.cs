@@ -3,7 +3,7 @@
 
 using System;
 using UnityEngine;
-using UnityEngine.VR.WSA.Input;
+using UnityEngine.XR.WSA.Input;
 
 namespace HoloToolkit.Unity.InputModule
 {
@@ -35,9 +35,9 @@ namespace HoloToolkit.Unity.InputModule
         /// <summary>
         /// Button type that initiated the event.
         /// </summary>
-        public InteractionPressKind ButtonType { get; private set; }
+        public InteractionSourcePressType ButtonType { get; private set; }
 
-        public SourceButtonEventArgs(IInputSource inputSource, uint sourceId, InteractionPressKind buttonType)
+        public SourceButtonEventArgs(IInputSource inputSource, uint sourceId, InteractionSourcePressType buttonType)
             : base(inputSource, sourceId)
         {
             ButtonType = buttonType;
@@ -55,7 +55,7 @@ namespace HoloToolkit.Unity.InputModule
         public int TapCount { get; private set; }
 
         public SourceClickEventArgs(IInputSource inputSource, uint sourceId, int tapCount)
-            : base(inputSource, sourceId, InteractionPressKind.Select)
+            : base(inputSource, sourceId, InteractionSourcePressType.Select)
         {
             TapCount = tapCount;
         }

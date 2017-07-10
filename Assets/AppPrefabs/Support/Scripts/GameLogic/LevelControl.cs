@@ -737,7 +737,7 @@ public class LevelControl : NetworkBehaviour
             AvatarStuff[index].GoalLight.SetActive(false);
         }
 
-        if (UnityEngine.VR.WSA.HolographicSettings.IsDisplayOpaque)
+        if (UnityEngine.XR.WSA.HolographicSettings.IsDisplayOpaque)
         {
             playerController.SceneReset();
         }
@@ -785,6 +785,7 @@ public class LevelControl : NetworkBehaviour
             {
                 lpsd.ImmersedAvatar = Instantiate(AvatarStuff[lpsd.PathIndex].Avatar);
                 lpsd.ImmersedAvatar.transform.SetParent(ParentObject.transform, false);
+                ConfigureAvatarsForPathState();
             }
 
             SetRenderersAndColliders(lpsd.FullAvatar, !lpsd.Immersed);
@@ -841,7 +842,7 @@ public class LevelControl : NetworkBehaviour
     /// <param name="pathIndex">The path index to set</param>
     public void SetPathIndex(int pathIndex)
     {
-        if (UnityEngine.VR.WSA.HolographicSettings.IsDisplayOpaque && warper != null && fadeScript != null && !fadeScript.Busy && pathIndex != onPathIndex)
+        if (UnityEngine.XR.WSA.HolographicSettings.IsDisplayOpaque && warper != null && fadeScript != null && !fadeScript.Busy && pathIndex != onPathIndex)
         {
             fadeScript.DoFade(1, 1,
                 () =>
