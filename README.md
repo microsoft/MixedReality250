@@ -2,7 +2,7 @@
 
 This is the tutorial presented at //build2017.  Link to documentation is forthcoming. 
 
-**Current Unity Editor Project Version: Early access 5.6.1f1-MRTP8** **Not accessible broadly yet.**
+**Current Unity Editor Project Version: Unity 2017.2 beta.**
 
 ## Prerequisites:
 1. See [Development PC specs](https://developer.microsoft.com/en-us/windows/mixed-reality/install_the_tools#developing_for_immersive_headsets) for tips on developing for immersive headsets.
@@ -10,7 +10,7 @@ This is the tutorial presented at //build2017.  Link to documentation is forthco
 3. Development PC needs to be on Creators Update SDK and builds as below. Either:
     1. Launch Settings > Updates and Security > Windows Insider Program > Get Insider Preview builds 
     2. Update to the publicly released Creators Update, build 15063.
-4. Early access private build of Unity 5.6.1f1-MRTP8 with Creators Update API support. This build of Unity is currently invite only.
+4. Beta build of Unity 2017.2
     1. Please read more about [Immersive headset details](https://developer.microsoft.com/en-us/windows/mixed-reality/immersive_headset_details).
 5. [Visual Studio 2017](https://www.visualstudio.com/downloads/).
 
