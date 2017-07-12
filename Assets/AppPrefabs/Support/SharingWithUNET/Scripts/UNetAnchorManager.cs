@@ -42,12 +42,88 @@ namespace HoloToolkit.Examples.SharingWithUNET
         /// These tend to not work, so we have a minimum trustable size.
         /// </summary>
         private const uint minTrustworthySerializedAnchorDataSize = 500000;
-
+        
+        public void UpdateAnchorOwnerIP(string UpdatedOwnerIP)
+        {
+            string LocalIp = PlayerController.Instance == null ? "" : PlayerController.Instance.PlayerIp;
+            Debug.Log("Setting anchor owner to " + UpdatedOwnerIP + " local ip = "+ LocalIp);
+            AnchorOwnerIP = UpdatedOwnerIP;
+            //if (AnchorOwnerIP != string.Empty)
+            //{
+            //    if (PlayerController.Instance != null && AnchorOwnerIP == PlayerController.Instance.PlayerIp && string.IsNullOrEmpty(exportingAnchorName))
+            //    {
+            //        Debug.Log("We need to create anchor");
+            //        CreateAnchor();
+            //    }
+            //}
+        }
+        
         /// <summary>
         /// Keeps track of the name of the world anchor to use.
         /// </summary>
-        [SyncVar]
+        [SyncVar (hook = "AnchorNameHook")]
         public string AnchorName = "";
+
+        private void AnchorNameHook(string value)
+        {
+            Debug.LogFormat("New anchor name {0} => {1}", AnchorName, value);
+            AnchorName = value;
+            bool WeOwnIt = (PlayerController.Instance != null && AnchorOwnerIP == PlayerController.Instance.PlayerIp);
+            Debug.LogFormat("{0} like we created it", WeOwnIt ? "looks" : "doesn't look");
+            if (UnityEngine.XR.WSA.HolographicSettings.IsDisplayOpaque)
+            {
+                return;
+            }
+#if WINDOWS_UWP
+            if (!WeOwnIt)
+            {
+                if (string.IsNullOrEmpty(AnchorName))
+                {
+                    Debug.Log("anchor is empty");
+                    AnchorEstablished = false;
+                }
+                else if (!AttachToCachedAnchor(AnchorName))
+                {
+                    Debug.Log("Guess we need it");
+                    WaitForAnchor();
+                }
+            }
+#endif
+        }
+
+        [SyncVar(hook = "AnchorOwnerIPHook")]
+        public string AnchorOwnerIP = "";
+
+        private void AnchorOwnerIPHook(string value)
+        {
+            AnchorOwnerIP = value;
+            if (value != string.Empty)
+            {
+                Debug.Log("setting Anchor owner to "+AnchorOwnerIP);
+                if (PlayerController.Instance != null && AnchorOwnerIP == PlayerController.Instance.PlayerIp)
+                {
+                    Debug.Log("We need to create anchor");
+                    CreateAnchor();
+                }
+            }
+            else
+            {
+                Debug.Log("Seeking updated anchor owner");
+                foreach(PlayerController pc in PlayerController.allPlayers)
+                {
+                    if(pc.SharesSpatialAnchors && pc.PlayerIp != string.Empty)
+                    {
+                        Debug.Log("Found one " + pc.PlayerIp);
+                        AnchorOwnerIP = pc.PlayerIp;
+                    }
+                }
+
+                if(AnchorOwnerIP == string.Empty)
+                {
+                    Debug.Log("Didn't find a new owner, hopefully one joins :)");
+                }
+            }
+        }
 
         /// <summary>
         /// List of bytes that represent the anchor data to export.
@@ -75,13 +151,6 @@ namespace HoloToolkit.Examples.SharingWithUNET
         /// The object to attach the anchor to when created or imported.
         /// </summary>
         private GameObject objectToAnchor;
-
-        /// <summary>
-        /// Previous anchor name.
-        /// </summary>
-#pragma warning disable 0414
-        private string oldAnchorName = "";
-#pragma warning restore 0414
 
         /// <summary>
         /// The anchorData to import.
@@ -148,6 +217,18 @@ namespace HoloToolkit.Examples.SharingWithUNET
             return true;
         }
 
+        public string GenerateDebugString()
+        {
+            return string.Format("Anchor Name: {0}\nAnchor Owner: {1}\nAnchor Size {2}\nCreated Anchor {3}\nAnchor Esablished {4}\nImporting {5}\nDownloading {6}\n",
+                AnchorName,
+                AnchorOwnerIP,
+                exportingAnchorBytes.Count,
+                createdAnchor,
+                AnchorEstablished,
+                ImportInProgress,
+                DownloadingAnchor);
+        }
+
         private void Start()
         {
             if (!CheckConfiguration())
@@ -165,6 +246,9 @@ namespace HoloToolkit.Examples.SharingWithUNET
             {
                 networkTransmitter.dataReadyEvent += NetworkTransmitter_dataReadyEvent;
             }
+            Debug.Log("setting starting anchor name");
+            AnchorNameHook(AnchorName);
+            AnchorOwnerIPHook(AnchorOwnerIP);
         }
 
         private void Update()
@@ -181,23 +265,6 @@ namespace HoloToolkit.Examples.SharingWithUNET
                 gotOne = false;
                 ImportInProgress = true;
                 WorldAnchorTransferBatch.ImportAsync(anchorData, ImportComplete);
-            }
-
-            if (oldAnchorName != AnchorName && !createdAnchor)
-            {
-                Debug.LogFormat("New anchor name {0} => {1}", oldAnchorName, AnchorName);
-                oldAnchorName = AnchorName;
-                if (string.IsNullOrEmpty(AnchorName))
-                {
-                    Debug.Log("anchor is empty");
-                    AnchorEstablished = false;
-                }
-                else if (!AttachToCachedAnchor(AnchorName))
-                {
-                    Debug.Log("Guess we need it");
-                    WaitForAnchor();
-                }
-                
             }
 #else
             return;
@@ -363,6 +430,7 @@ namespace HoloToolkit.Examples.SharingWithUNET
                 Debug.Log("Anchor ready "+exportingAnchorBytes.Count);
                 GenericNetworkTransmitter.Instance.ConfigureAsServer();
                 AnchorEstablished = true;
+                PlayerController.Instance.UpdateAnchorName(AnchorName);
             }
             else
             {
@@ -376,6 +444,11 @@ namespace HoloToolkit.Examples.SharingWithUNET
 
         public void AnchorFoundRemotely()
         {
+            if (UnityEngine.XR.WSA.HolographicSettings.IsDisplayOpaque)
+            {
+                return;
+            }
+
             Debug.Log("Setting saved anchor to " + AnchorName);
             WorldAnchorManager.Instance.AnchorStore.Save(AnchorName, objectToAnchor.GetComponent<WorldAnchor>());
             PlayerPrefs.SetString(SavedAnchorKey, AnchorName);

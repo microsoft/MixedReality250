@@ -13,26 +13,12 @@ public class StartSessionButton : MonoBehaviour, IInputClickHandler {
     {
         if (networkDiscovery.running)
         {
-            // Only let hololens host...
-#if !UNITY_EDITOR
-            if (!UnityEngine.XR.WSA.HolographicSettings.IsDisplayOpaque)
-#endif
-            {
-                networkDiscovery.StartHosting("SuperRad");
-            }
+            networkDiscovery.StartHosting("SuperRad");
         }
     }
 
     // Use this for initialization
     void Start () {
         networkDiscovery = NetworkDiscoveryWithAnchors.Instance;
-#if !UNITY_EDITOR
-        if (UnityEngine.XR.WSA.HolographicSettings.IsDisplayOpaque)
-
-        {
-            Debug.Log("Only hololens can host for now");
-            Destroy(this.gameObject);
-        }
-#endif
     }
 }

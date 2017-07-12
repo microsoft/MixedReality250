@@ -55,7 +55,6 @@ namespace HoloToolkit.Examples.SharingWithUNET
             }
         }
 
-
         /// <summary>
         /// Event raised when the list of sessions changes.
         /// </summary>
@@ -157,46 +156,6 @@ namespace HoloToolkit.Examples.SharingWithUNET
         }
 
         /// <summary>
-        /// If we haven't received a broadcast by the time this gets called
-        /// we will start broadcasting and start creating an anchor.
-        /// </summary>
-        private void MaybeInitAsServer()
-        {
-            Debug.Log("Acting as host");
-#if WINDOWS_UWP
-            foreach (Windows.Networking.HostName hostName in Windows.Networking.Connectivity.NetworkInformation.GetHostNames())
-            {
-                if (hostName.DisplayName.Split(".".ToCharArray()).Length == 4)
-                {
-                    Debug.Log(hostName.DisplayName);
-                    NetworkManager.singleton.serverBindToIP = true;
-                    NetworkManager.singleton.serverBindAddress = hostName.DisplayName;
-                }
-               // NetworkManager.singleton.serverBindToIP = hostName.DisplayName;
-            }
-#endif
-            // StopBroadcast will also 'StopListening'
-            StopBroadcast();
-
-            // Starting as a 'host' makes us both a client and a server.
-            // There are nuances to this in UNet's sync system, so do make sure
-            // to test behavior of your networked objects on both a host and a client 
-            // device.
-            NetworkManager.singleton.StartHost();
-
-            // Start broadcasting for other clients.
-            StartAsServer();
-
-#if !UNITY_EDITOR
-            // Start creating an anchor.
-            UNetAnchorManager.Instance.CreateAnchor();
-#else
-            Debug.LogWarning("This script will need modification to work in the Unity Editor");
-#endif
-        }
-
-
-        /// <summary>
         /// Called by UnityEngine when a broadcast is received. 
         /// </summary>
         /// <param name="fromAddress">When the broadcast came from</param>
@@ -241,12 +200,7 @@ namespace HoloToolkit.Examples.SharingWithUNET
             // We have to parse the server IP to make the string friendly to the windows APIs.
             ServerIp = session.SessionIp;
             NetworkManager.singleton.networkAddress = ServerIp;
-#if !UNITY_EDITOR
-            // Tell the network transmitter the IP to request anchor data from if needed.
-            GenericNetworkTransmitter.Instance.SetServerIP(ServerIp);
-#else
-            Debug.LogWarning("This script will need modification to work in the Unity Editor");
-#endif
+
 
             // And join the networked experience as a client.
             NetworkManager.singleton.StartClient();
@@ -284,12 +238,6 @@ namespace HoloToolkit.Examples.SharingWithUNET
             // Start broadcasting for other clients.
             StartAsServer();
 
-#if !UNITY_EDITOR
-            // Start creating an anchor.
-            UNetAnchorManager.Instance.CreateAnchor();
-#else
-            Debug.LogWarning("This script will need modification to work in the Unity Editor");
-#endif
 
             SignalSessionListEvent();
             SignalConnectionStatusEvent();

@@ -35,7 +35,13 @@ namespace HoloToolkit.Examples.SharingWithUNET
         /// <summary>
         /// The server to connect to when data is needed.
         /// </summary>
-        private string serverIP;
+        private string serverIP
+        {
+            get
+            {
+                return UNetAnchorManager.Instance.AnchorOwnerIP;
+            }
+        }
 
         /// <summary>
         /// Tracks if we have a connection request outstanding.
@@ -54,16 +60,6 @@ namespace HoloToolkit.Examples.SharingWithUNET
         public void SetData(byte[] data)
         {
             mostRecentDataBuffer = data;
-        }
-
-        /// <summary>
-        /// Tells us who to contact if we need data.
-        /// </summary>
-        /// <param name="ServerIP"></param>
-        public void SetServerIP(string ServerIP)
-        {
-            serverIP = ServerIP.Trim();
-            Debug.Log("using server ip " + serverIP);
         }
 
         /// <summary>

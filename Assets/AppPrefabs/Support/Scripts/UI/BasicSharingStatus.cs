@@ -19,12 +19,12 @@ public class BasicSharingStatus : MonoBehaviour
     int framesPerSecond;
     int lastWholeTime = 0;
     NetworkDiscoveryWithAnchors networkDiscovery;
+    UNetAnchorManager anchorManager;
     // Use this for initialization
     void Awake()
     {
         textMesh = GetComponent<TextMesh>();
         networkDiscovery = NetworkDiscoveryWithAnchors.Instance;
-       
         Application.logMessageReceivedThreaded += Application_logMessageReceivedThreaded;
 
     }
@@ -97,6 +97,15 @@ public class BasicSharingStatus : MonoBehaviour
 
         ButtonString += string.Format("FPS: {0}\n", framesPerSecond);
 
+        if (anchorManager == null)
+        {
+            anchorManager = UNetAnchorManager.Instance;
+        }
+        else
+        {
+            ButtonString += string.Format("{0}\n",
+                anchorManager.GenerateDebugString());
+        }
         string NetworkInfoString = string.Format(
             "Port: {0}\nhostID: {1}\nrcv count: {2}\nIsClient? {3}\nis Server? {4}\nis Running?{5}\n", 
             networkDiscovery.broadcastPort, 

@@ -4,7 +4,7 @@
 using UnityEngine;
 using UnityEngine.Networking;
 using HoloToolkit.Unity.InputModule;
-
+using System.Collections.Generic;
 
 namespace HoloToolkit.Examples.SharingWithUNET
 {
@@ -22,6 +22,8 @@ namespace HoloToolkit.Examples.SharingWithUNET
                 return _Instance;
             }
         }
+
+        public static List<PlayerController> allPlayers = new List<PlayerController>();
 
         /// <summary>
         /// The transform of the shared world anchor.
@@ -79,6 +81,17 @@ namespace HoloToolkit.Examples.SharingWithUNET
             }
         }
 
+        [Command]
+        private void CmdSetAnchorOwnerIP(string UpdatedIP)
+        {
+            anchorManager.UpdateAnchorOwnerIP(UpdatedIP);
+        }
+
+        public void SetAnchorOwnerIP(string UpdatedIP)
+        {
+            CmdSetAnchorOwnerIP(UpdatedIP);
+        }
+
         [SyncVar(hook = "PlayerNameChanged")]
         string PlayerName;
 
@@ -104,7 +117,7 @@ namespace HoloToolkit.Examples.SharingWithUNET
 
 #pragma warning disable 0414
         [SyncVar(hook = "PlayerIpChanged")]
-        string PlayerIp;
+        public string PlayerIp;
 #pragma warning restore 0414
         [Command]
         private void CmdSetPlayerIp(string playerIp)
@@ -219,6 +232,17 @@ namespace HoloToolkit.Examples.SharingWithUNET
             Debug.LogFormat("{0} {1} share", PlayerName, SharesSpatialAnchors ? "does" : "does not");
         }
 
+        [Command]
+        private void CmdUpdateAnchorName(string UpdatedName)
+        {
+            anchorManager.AnchorName = UpdatedName;
+        }
+
+        public void UpdateAnchorName(string UpdatedName)
+        {
+            CmdUpdateAnchorName(UpdatedName);
+        }
+
         public void SendPathIndex(int RequestedPathIndex)
         {
             CmdSendPathIndex(RequestedPathIndex);
@@ -256,6 +280,7 @@ namespace HoloToolkit.Examples.SharingWithUNET
             }
         }
 
+       
         void Awake()
         {
             cloudMaterial = GetComponentInChildren<MeshRenderer>().material;
@@ -263,6 +288,7 @@ namespace HoloToolkit.Examples.SharingWithUNET
             networkDiscovery = NetworkDiscoveryWithAnchors.Instance;
             anchorManager = UNetAnchorManager.Instance;
             levelState = LevelControl.Instance;
+            allPlayers.Add(this);
         }
 
         private void Start()
@@ -327,6 +353,21 @@ namespace HoloToolkit.Examples.SharingWithUNET
                             }, null);
                     }
                 }
+
+                if (!opaqueDisplay && anchorManager.AnchorOwnerIP == "")
+                {
+                    Invoke("DeferredAnchorOwnerCheck", 2.0f);
+                    
+                }
+            }
+        }
+
+        private void DeferredAnchorOwnerCheck()
+        {
+            if (!UnityEngine.XR.WSA.HolographicSettings.IsDisplayOpaque && anchorManager.AnchorOwnerIP == "")
+            {
+                Debug.Log("Claiming anchor ownership " + networkDiscovery.LocalIp);
+                CmdSetAnchorOwnerIP(networkDiscovery.LocalIp);
             }
         }
 
@@ -337,6 +378,11 @@ namespace HoloToolkit.Examples.SharingWithUNET
 
         private void OnDestroy()
         {
+            if (allPlayers.Contains(this))
+            {
+                allPlayers.Remove(this);
+            }
+
             if (levelState != null)
             {
                 levelState.RemoteAvatarReady(this.gameObject, PlayerName, false);
@@ -350,6 +396,13 @@ namespace HoloToolkit.Examples.SharingWithUNET
             if (!isLocalPlayer && PlayerController.Instance != null)
             {
                 PlayerController.Instance.CheckLine();
+            }
+
+            // Anchor owner is disconnecting, find a new anchor.
+            if (UNetAnchorManager.Instance.AnchorOwnerIP == PlayerIp)
+            {
+                Debug.Log("Hey, the anchor owner is going away");
+                anchorManager.AnchorOwnerIP = "";
             }
         }
 
