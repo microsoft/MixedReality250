@@ -1,9 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
+
 using UnityEngine;
-using UnityEngine.Windows.Speech;
 using HoloToolkit.Unity.InputModule;
-using System;
 
 public class ToggleDebugWindow : MonoBehaviour, IInputClickHandler
 {
@@ -15,6 +14,14 @@ public class ToggleDebugWindow : MonoBehaviour, IInputClickHandler
     {
         UpdateChildren();
 	}
+
+    private void Update()
+    {
+        if (Input.GetButtonUp("Fire3"))
+        {
+            OnInputClicked(null);
+        }
+    }
 
     public void OnInputClicked(InputClickedEventData eventData)
     {
