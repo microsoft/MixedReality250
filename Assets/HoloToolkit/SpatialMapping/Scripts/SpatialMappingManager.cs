@@ -190,6 +190,8 @@ namespace HoloToolkit.Unity.SpatialMapping
             // Allow observering if a device is present (Holographic Remoting)
             if (!UnityEngine.XR.XRDevice.isPresent) return;
 #endif
+
+            if (UnityEngine.XR.WSA.HolographicSettings.IsDisplayOpaque) return;
             if (!IsObserverRunning())
             {
                 surfaceObserver.StartObserving();
