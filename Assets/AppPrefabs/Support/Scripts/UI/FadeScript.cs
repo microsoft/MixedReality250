@@ -36,7 +36,7 @@ public class FadeScript : SingleInstance<FadeScript> {
 
         if (UnityEngine.XR.WSA.HolographicSettings.IsDisplayOpaque == false)
         {
-            GetComponentInChildren<MeshRenderer>().enabled = false;
+            this.gameObject.SetActive(false);
             Debug.Log("removing unnecessary full screen effect from hololens");
             return;
         }

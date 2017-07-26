@@ -3,33 +3,42 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SetTutorialText : MonoBehaviour {
+public class SetTutorialText : SingleInstance<SetTutorialText> {
 
-    string CommonHeaderText = "Welcome to the Mixed Reality Island!";
-    string CommonFooterText =
-        "\nTap any of this text to continue\nAfter dismissing this screen, the next UI will allow you to\n" +
+    static string CommonHeaderText = 
+        "Welcome to the Mixed Reality Island!";
+    static string CommonFooterText =
+        "\nAfter tapping next, the following UI will allow you to\n" +
         "start a new session or join an existing session\n";
 
-    string HoloLensText =
+    static string HoloLensText1 =
         "You have a HoloLens.\n" +
         "You will be shown a bird's eye view of the island.\n" +
         "You can airtap the island to pick it up\n" +
         "look around, and air tap again to place\n" +
         "the island on a surface.  We recommend\n" +
-        "a table.\n" +
-        "If you are playing alone, we're afraid there isn't\n" +
+        "a table.\n";
+
+    static string HoloLensText2 =
+        "If you are playing alone, there isn't\n" +
         "much to do but enjoy the ambient audio.\n" +
-        "If you have friends with a Windows Mixed Reality headset\n" +
-        "then you have the job of guiding them through the island\n" +
-        "to launch the rocket in the totally safe volcano on the island.\n" +
-        "Clues will appear as players on the island approach obstructions.\n" +
-        "Give these clues to your friends on the island.\n" +
-        "When all three paths have been completed, the rocket will launch!\n" +
-        "If you have friends with a HoloLens device then you will see red\n" +
+        "If you have friends with a Windows Mixed\n"+
+        "Reality headset then you have the job of\n"+
+        "guiding them through the island to launch\n"+
+        "the rocket in the totally safe volcano on\n"+
+        "the island.\n" +
+        "Clues will appear as players on the island\n" +
+        "approach obstructions. Give these clues to\n"+
+        "your friends on the island.\n";
+
+    static string HoloLensText3 = 
+        "When all three paths have been completed,\n"+
+        "the rocket will launch! If you have friends\n"+
+        "with a HoloLens device then you will see red\n" +
         "clouds over their head in the real world!\n";
 
 
-    string ImmersiveDeviceText =
+    static string ImmersiveDeviceText1 =
         "You have an immersive mixed reality device\n" +
         "You will be immersed on the island. Your job\n" +
         "will be to get into the volcano on the island\n" +
@@ -37,7 +46,9 @@ public class SetTutorialText : MonoBehaviour {
         "if you have a friend with a HoloLens, that friend\n" +
         "will get a clue about clearing the obstacle.\n" +
         "When all three paths have been completed, the\n" +
-        "rocket in the volcano will launch!\n\n" +
+        "rocket in the volcano will launch!\n";
+
+    static string ImmersiveDeviceText2 = 
         "Movement: \n" +
         "     Hold Y - Show teleport marker\n" +
         "       If the arrow on the teleport marker is spinning\n" +
@@ -46,30 +57,72 @@ public class SetTutorialText : MonoBehaviour {
         "     X - Toggle Debug Window\n" +
         "     Left/Right bumpers - Rotate\n";
 
+    string[] ImmersiveTutorialScreens = new string[]
+    {
+        CommonHeaderText,
+        ImmersiveDeviceText1,
+        ImmersiveDeviceText2,
+        CommonFooterText
 
+    };
 
+    string[] HololensTutorialScreens = new string[]
+    {
+        CommonHeaderText,
+        HoloLensText1,
+        HoloLensText2,
+        HoloLensText3,
+        CommonFooterText
+    };
 
+    int TutorialIndex = 0;
+    string[] TutorialTextScreens;
+
+    TextMesh textMesh;
     // Use this for initialization
     void Start () {
-        SetText();
+        textMesh = GetComponent<TextMesh>();
+        SetTextScreens();
 	}
 	
-    void SetText()
+    void SetTextScreens()
     {
-        TextMesh textMesh = GetComponent<TextMesh>();
-        string subtext = "";
-
+        
+        
         if (UnityEngine.XR.WSA.HolographicSettings.IsDisplayOpaque)
         {
-            subtext = ImmersiveDeviceText;
+            TutorialTextScreens = ImmersiveTutorialScreens;
         }
         else
         {
-            subtext = HoloLensText;
+            TutorialTextScreens = HololensTutorialScreens;
         }
 
-        textMesh.text = string.Format("{0}\n{1}\n{2}", CommonHeaderText, subtext, CommonFooterText);
-        DestroyImmediate(GetComponent<BoxCollider>());
-        gameObject.AddComponent<BoxCollider>();
+        UpdateText();
+       
+    }
+
+    private void UpdateText()
+    {
+        if (TutorialIndex < TutorialTextScreens.Length)
+        {
+            textMesh.text = TutorialTextScreens[TutorialIndex];
+        }
+        else
+            {
+            textMesh.text = "A programmer messed up";
+        }
+    }
+
+    public bool Next()
+    {
+        TutorialIndex++;
+        if (TutorialIndex < TutorialTextScreens.Length)
+        {
+            UpdateText();
+            return true;
+        }
+
+        return false;
     }
 }
