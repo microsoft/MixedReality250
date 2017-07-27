@@ -8,8 +8,8 @@ public class SetTutorialText : SingleInstance<SetTutorialText> {
     static string CommonHeaderText = 
         "Welcome to the Mixed Reality Island!";
     static string CommonFooterText =
-        "\nAfter tapping next, the following UI will allow you to\n" +
-        "start a new session or join an existing session\n";
+        "After tapping next, the following UI will allow you to\n" +
+        "start a new session or join an existing session.\n";
 
     static string HoloLensText1 =
         "You have a HoloLens.\n" +
@@ -17,7 +17,9 @@ public class SetTutorialText : SingleInstance<SetTutorialText> {
         "You can airtap the island to pick it up\n" +
         "look around, and air tap again to place\n" +
         "the island on a surface.  We recommend\n" +
-        "a table.\n";
+        "a table.  If you have friends with a\n" +
+        "HoloLens device then you will see red\n" +
+        "clouds over their head in the real world!\n";
 
     static string HoloLensText2 =
         "If you are playing alone, there isn't\n" +
@@ -25,26 +27,23 @@ public class SetTutorialText : SingleInstance<SetTutorialText> {
         "If you have friends with a Windows Mixed\n"+
         "Reality headset then you have the job of\n"+
         "guiding them through the island to launch\n"+
-        "the rocket in the totally safe volcano on\n"+
-        "the island.\n" +
+        "the rocket in the totally safe volcano.\n"+
         "Clues will appear as players on the island\n" +
         "approach obstructions. Give these clues to\n"+
         "your friends on the island.\n";
 
-    static string HoloLensText3 = 
-        "When all three paths have been completed,\n"+
-        "the rocket will launch! If you have friends\n"+
-        "with a HoloLens device then you will see red\n" +
-        "clouds over their head in the real world!\n";
+    static string HoloLensText3 =
+        "When all three paths have been completed,\n" +
+        "the rocket will launch!\n";
 
 
     static string ImmersiveDeviceText1 =
-        "You have an immersive mixed reality device\n" +
-        "You will be immersed on the island. Your job\n" +
-        "will be to get into the volcano on the island\n" +
-        "you will encounter obstacles along the way\n" +
-        "if you have a friend with a HoloLens, that friend\n" +
-        "will get a clue about clearing the obstacle.\n" +
+        "You have an immersive mixed reality device.\n" +
+        "You will be immersed on an island. Your job\n" +
+        "will be to get into the volcano on the island.\n" +
+        "You will encounter obstacles along the way.\n" +
+        "If you have a friend with a HoloLens, that friend\n" +
+        "will get clues about clearing the obstacles.\n" +
         "When all three paths have been completed, the\n" +
         "rocket in the volcano will launch!\n";
 
