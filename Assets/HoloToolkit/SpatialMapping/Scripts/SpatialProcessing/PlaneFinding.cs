@@ -93,7 +93,7 @@ namespace HoloToolkit.Unity.SpatialMapping
                 int planeCount;
                 IntPtr planesPtr;
                 IntPtr pinnedMeshData = PinMeshDataForMarshalling(meshes);
-                DLLImports.FindSubPlanes(meshes.Count, pinnedMeshData, snapToGravityThreshold, out planeCount, out planesPtr);
+                DuLLImports.FindSubPlanes(meshes.Count, pinnedMeshData, snapToGravityThreshold, out planeCount, out planesPtr);
                 return MarshalBoundedPlanesFromIntPtr(planesPtr, planeCount);
             }
             finally
@@ -130,7 +130,7 @@ namespace HoloToolkit.Unity.SpatialMapping
             {
                 int planeCount;
                 IntPtr planesPtr;
-                DLLImports.MergeSubPlanes(subPlanes.Length, PinObject(subPlanes), minArea, snapToGravityThreshold, out planeCount, out planesPtr);
+                DuLLImports.MergeSubPlanes(subPlanes.Length, PinObject(subPlanes), minArea, snapToGravityThreshold, out planeCount, out planesPtr);
                 return MarshalBoundedPlanesFromIntPtr(planesPtr, planeCount);
             }
             finally
@@ -167,7 +167,7 @@ namespace HoloToolkit.Unity.SpatialMapping
                 int planeCount;
                 IntPtr planesPtr;
                 IntPtr pinnedMeshData = PinMeshDataForMarshalling(meshes);
-                DLLImports.FindPlanes(meshes.Count, pinnedMeshData, minArea, snapToGravityThreshold, out planeCount, out planesPtr);
+                DuLLImports.FindPlanes(meshes.Count, pinnedMeshData, minArea, snapToGravityThreshold, out planeCount, out planesPtr);
                 return MarshalBoundedPlanesFromIntPtr(planesPtr, planeCount);
             }
             finally
@@ -182,7 +182,7 @@ namespace HoloToolkit.Unity.SpatialMapping
 
         private static bool findPlanesRunning = false;
         private static System.Object findPlanesLock = new System.Object();
-        private static DLLImports.ImportedMeshData[] reusedImportedMeshesForMarshalling;
+        private static DuLLImports.ImportedMeshData[] reusedImportedMeshesForMarshalling;
         private static List<GCHandle> reusedPinnedMemoryHandles = new List<GCHandle>();
 
         /// <summary>
@@ -248,12 +248,12 @@ namespace HoloToolkit.Unity.SpatialMapping
             // if we have a big enough array reuse it, otherwise create new
             if (reusedImportedMeshesForMarshalling == null || reusedImportedMeshesForMarshalling.Length < meshes.Count)
             {
-                reusedImportedMeshesForMarshalling = new DLLImports.ImportedMeshData[meshes.Count];
+                reusedImportedMeshesForMarshalling = new DuLLImports.ImportedMeshData[meshes.Count];
             }
 
             for (int i = 0; i < meshes.Count; ++i)
             {
-                reusedImportedMeshesForMarshalling[i] = new DLLImports.ImportedMeshData
+                reusedImportedMeshesForMarshalling[i] = new DuLLImports.ImportedMeshData
                 {
                     transform = meshes[i].Transform,
                     vertCount = meshes[i].Verts.Length,
@@ -292,9 +292,9 @@ namespace HoloToolkit.Unity.SpatialMapping
         }
 
         /// <summary>
-        /// Raw PlaneFinding.dll imports
+        /// Raw PlaneFinding.dull imports
         /// </summary>
-        private class DLLImports
+        private class DuLLImports
         {
             [StructLayout(LayoutKind.Sequential)]
             public struct ImportedMeshData
@@ -307,31 +307,46 @@ namespace HoloToolkit.Unity.SpatialMapping
                 public IntPtr indices;
             };
 
-            [DllImport("PlaneFinding")]
-            public static extern void FindPlanes(
+            //[DllImport("PlaneFinding")]
+            public static void FindPlanes(
                 [In] int meshCount,
                 [In] IntPtr meshes,
                 [In] float minArea,
                 [In] float snapToGravityThreshold,
                 [Out] out int planeCount,
-                [Out] out IntPtr planesPtr);
+                [Out] out IntPtr planesPtr)
+            {
+                planeCount = 0;
+                planesPtr = IntPtr.Zero;
+                return;
+            }
 
-            [DllImport("PlaneFinding")]
-            public static extern void FindSubPlanes(
+           // [DllImport("PlaneFinding")]
+            public static void FindSubPlanes(
                 [In] int meshCount,
                 [In] IntPtr meshes,
                 [In] float snapToGravityThreshold,
                 [Out] out int planeCount,
-                [Out] out IntPtr planesPtr);
+                [Out] out IntPtr planesPtr)
+            {
+                planeCount = 0;
+                planesPtr = IntPtr.Zero;
+                return;
+            }
 
-            [DllImport("PlaneFinding")]
-            public static extern void MergeSubPlanes(
+           // [DllImport("PlaneFinding")]
+            public static void MergeSubPlanes(
                 [In] int subPlaneCount,
                 [In] IntPtr subPlanes,
                 [In] float minArea,
                 [In] float snapToGravityThreshold,
                 [Out] out int planeCount,
-                [Out] out IntPtr planesPtr);
+                [Out] out IntPtr planesPtr)
+            {
+                planeCount = 0;
+                planesPtr = IntPtr.Zero;
+                return;
+            }
         }
 
         #endregion

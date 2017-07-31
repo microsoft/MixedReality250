@@ -27,6 +27,7 @@ public class ScrollingSessionListUIController : SingleInstance<ScrollingSessionL
         networkDiscovery = NetworkDiscoveryWithAnchors.Instance;
         networkDiscovery.SessionListChanged += NetworkDiscovery_SessionListChanged;
         networkDiscovery.ConnectionStatusChanged += NetworkDiscovery_ConnectionStatusChanged;
+        sessionList = networkDiscovery.remoteSessions;
         ScrollSessions(0);
     }
 
