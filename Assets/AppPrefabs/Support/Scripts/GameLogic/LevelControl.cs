@@ -669,6 +669,10 @@ public class LevelControl : NetworkBehaviour
                     players.Value.ImmersedAvatar.transform.position = remoteGazeOrigin;
                     players.Value.ImmersedAvatar.transform.LookAt(gazeTarget);
                 }
+                else
+                {
+                    Debug.Log("No immersed avatar...");
+                }
 #if LINE_REND
                 Vector3[] points = new Vector3[] { remoteGazeOrigin, gazeTarget };
                 lineRend.SetPositions(points);
