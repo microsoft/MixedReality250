@@ -123,7 +123,7 @@ namespace HoloToolkit.Unity.SpatialMapping
                             {
                                 StorageFolder folder = await StorageFolder.GetFolderFromPathAsync(folderName);
                                 StorageFile file = await folder.GetFileAsync(fileName);
-                                stream = await file.OpenStreamForReadAsync();
+                              //  stream = await file.OpenStreamForReadAsync();
                             });
             task.Wait();
             task.Result.Wait();
@@ -150,7 +150,7 @@ namespace HoloToolkit.Unity.SpatialMapping
                             {
                                 StorageFolder folder = await StorageFolder.GetFolderFromPathAsync(folderName);
                                 StorageFile file = await folder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
-                                stream = await file.OpenStreamForWriteAsync();
+                                //stream = await file.OpenStreamForWriteAsync();
                             });
             task.Wait();
             task.Result.Wait();

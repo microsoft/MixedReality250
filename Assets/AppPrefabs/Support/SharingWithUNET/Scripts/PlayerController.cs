@@ -485,7 +485,8 @@ namespace HoloToolkit.Examples.SharingWithUNET
                     {
                         Vector3 p1 = Vector3.zero;
                         Vector3 p2 = Vector3.zero;
-                        if (sources[0].properties.location.pointer.TryGetPosition(out p1) && sources[1].properties.location.pointer.TryGetPosition(out p2)
+                        
+                        if (sources[0].sourcePose.TryGetPosition(out p1) && sources[1].sourcePose.TryGetPosition(out p2)
                             && p1 != Vector3.zero && p2 != Vector3.zero)
                         {
                             float distBetweenHands = (p1 - p2).magnitude;

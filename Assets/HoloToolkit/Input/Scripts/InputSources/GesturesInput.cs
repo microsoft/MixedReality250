@@ -91,16 +91,16 @@ namespace HoloToolkit.Unity.InputModule
             base.Start();
 
             gestureRecognizer = new GestureRecognizer();
-            gestureRecognizer.OnTappedEvent += OnTappedEvent;
+            gestureRecognizer.Tapped += OnTappedEvent;
             
-            gestureRecognizer.OnHoldStartedEvent += OnHoldStartedEvent;
-            gestureRecognizer.OnHoldCompletedEvent += OnHoldCompletedEvent;
-            gestureRecognizer.OnHoldCanceledEvent += OnHoldCanceledEvent;
+            gestureRecognizer.HoldStarted += OnHoldStartedEvent;
+            gestureRecognizer.HoldCompleted += OnHoldCompletedEvent;
+            gestureRecognizer.HoldCanceled += OnHoldCanceledEvent;
 
-            gestureRecognizer.OnManipulationStartedEvent += OnManipulationStartedEvent;
-            gestureRecognizer.OnManipulationUpdatedEvent += OnManipulationUpdatedEvent;
-            gestureRecognizer.OnManipulationCompletedEvent += OnManipulationCompletedEvent;
-            gestureRecognizer.OnManipulationCanceledEvent += OnManipulationCanceledEvent;
+            gestureRecognizer.ManipulationStarted += OnManipulationStartedEvent;
+            gestureRecognizer.ManipulationUpdated += OnManipulationUpdatedEvent;
+            gestureRecognizer.ManipulationCompleted += OnManipulationCompletedEvent;
+            gestureRecognizer.ManipulationCanceled += OnManipulationCanceledEvent;
 
             //gestureRecognizer.SetRecognizableGestures(GestureSettings.Tap | 
             //                                          GestureSettings.ManipulationTranslate |
@@ -111,10 +111,10 @@ namespace HoloToolkit.Unity.InputModule
             // We need a separate gesture recognizer for navigation, since it isn't compatible with manipulation
             navigationGestureRecognizer = new GestureRecognizer();
 
-            navigationGestureRecognizer.OnNavigationStartedEvent += OnNavigationStartedEvent;
-            navigationGestureRecognizer.OnNavigationUpdatedEvent += OnNavigationUpdatedEvent;
-            navigationGestureRecognizer.OnNavigationCompletedEvent += OnNavigationCompletedEvent;
-            navigationGestureRecognizer.OnNavigationCanceledEvent += OnNavigationCanceledEvent;
+            navigationGestureRecognizer.NavigationStarted += OnNavigationStartedEvent;
+            navigationGestureRecognizer.NavigationUpdated += OnNavigationUpdatedEvent;
+            navigationGestureRecognizer.NavigationCompleted += OnNavigationCompletedEvent;
+            navigationGestureRecognizer.NavigationCanceled += OnNavigationCanceledEvent;
 
             if (UseRailsNavigation)
             {
@@ -141,25 +141,25 @@ namespace HoloToolkit.Unity.InputModule
             StopGestureRecognizer();
             if (gestureRecognizer != null)
             {
-                gestureRecognizer.OnTappedEvent -= OnTappedEvent;
+                gestureRecognizer.Tapped -= OnTappedEvent;
 
-                gestureRecognizer.OnHoldStartedEvent -= OnHoldStartedEvent;
-                gestureRecognizer.OnHoldCompletedEvent -= OnHoldCompletedEvent;
-                gestureRecognizer.OnHoldCanceledEvent -= OnHoldCanceledEvent;
+                gestureRecognizer.HoldStarted -= OnHoldStartedEvent;
+                gestureRecognizer.HoldCompleted -= OnHoldCompletedEvent;
+                gestureRecognizer.HoldCanceled -= OnHoldCanceledEvent;
 
-                gestureRecognizer.OnManipulationStartedEvent -= OnManipulationStartedEvent;
-                gestureRecognizer.OnManipulationUpdatedEvent -= OnManipulationUpdatedEvent;
-                gestureRecognizer.OnManipulationCompletedEvent -= OnManipulationCompletedEvent;
-                gestureRecognizer.OnManipulationCanceledEvent -= OnManipulationCanceledEvent;
+                gestureRecognizer.ManipulationStarted -= OnManipulationStartedEvent;
+                gestureRecognizer.ManipulationUpdated -= OnManipulationUpdatedEvent;
+                gestureRecognizer.ManipulationCompleted -= OnManipulationCompletedEvent;
+                gestureRecognizer.ManipulationCanceled -= OnManipulationCanceledEvent;
 
                 gestureRecognizer.Dispose();
             }
             if (navigationGestureRecognizer != null)
             {
-                navigationGestureRecognizer.OnNavigationStartedEvent -= OnNavigationStartedEvent;
-                navigationGestureRecognizer.OnNavigationUpdatedEvent -= OnNavigationUpdatedEvent;
-                navigationGestureRecognizer.OnNavigationCompletedEvent -= OnNavigationCompletedEvent;
-                navigationGestureRecognizer.OnNavigationCanceledEvent -= OnNavigationCanceledEvent;
+                navigationGestureRecognizer.NavigationStarted -= OnNavigationStartedEvent;
+                navigationGestureRecognizer.NavigationUpdated -= OnNavigationUpdatedEvent;
+                navigationGestureRecognizer.NavigationCompleted -= OnNavigationCompletedEvent;
+                navigationGestureRecognizer.NavigationCanceled -= OnNavigationCanceledEvent;
 
                 navigationGestureRecognizer.Dispose();
             }            
@@ -264,17 +264,17 @@ namespace HoloToolkit.Unity.InputModule
         /// <param name="sourceData">SourceData structure to update.</param>
         private void UpdateSourceState(InteractionSourceState interactionSource, SourceData sourceData)
         {
-            sourceData.Position.IsAvailable = interactionSource.properties.location.pointer.TryGetPosition(out sourceData.Position.CurrentReading);
+            sourceData.Position.IsAvailable = interactionSource.sourcePose.TryGetPosition(out sourceData.Position.CurrentReading);
               
             // Using a heuristic for IsSupported, since the APIs don't yet support querying this capability directly.
             sourceData.Position.IsSupported |= sourceData.Position.IsAvailable;
 
-            sourceData.Orientation.IsAvailable = interactionSource.properties.location.pointer.TryGetRotation(out sourceData.Orientation.CurrentReading);
+            sourceData.Orientation.IsAvailable = interactionSource.sourcePose.TryGetRotation(out sourceData.Orientation.CurrentReading);
             // Using a heuristic for IsSupported, since the APIs don't yet support querying this capability directly.
             sourceData.Orientation.IsSupported |= sourceData.Orientation.IsAvailable;
-
-            sourceData.PointingRay.IsSupported = interactionSource.supportsPointing;
-            sourceData.PointingRay.IsAvailable = interactionSource.properties.location.pointer.TryGetRay(out sourceData.PointingRay.CurrentReading);
+            
+            sourceData.PointingRay.IsSupported = interactionSource.source.supportsPointing;
+            sourceData.PointingRay.IsAvailable = false;// interactionSource.sourcePose.TryGetRay(out sourceData.PointingRay.CurrentReading);
 
             // TODO: Update other information we want to keep cached (touchpad position? trigger reading? thumbstick position?)
 
@@ -465,7 +465,7 @@ namespace HoloToolkit.Unity.InputModule
 
         protected void OnManipulationStartedEvent(ManipulationStartedEventArgs obj)
         {
-            inputManager.RaiseManipulationStarted(this, (uint)obj.source.id, obj.cumulativeDelta);
+            inputManager.RaiseManipulationStarted(this, (uint)obj.source.id, Vector3.zero);
         }
 
         protected void OnManipulationUpdatedEvent(ManipulationUpdatedEventArgs obj)
@@ -480,12 +480,12 @@ namespace HoloToolkit.Unity.InputModule
 
         protected void OnManipulationCanceledEvent(ManipulationCanceledEventArgs obj)
         {
-            inputManager.RaiseManipulationCanceled(this, (uint)obj.source.id, obj.cumulativeDelta);
+            inputManager.RaiseManipulationCanceled(this, (uint)obj.source.id, Vector3.zero);
         }
 
         protected void OnNavigationStartedEvent(NavigationStartedEventArgs obj)
         {
-            inputManager.RaiseNavigationStarted(this, (uint)obj.source.id, obj.normalizedOffset);
+            inputManager.RaiseNavigationStarted(this, (uint)obj.source.id, Vector3.zero);
         }
 
         protected void OnNavigationUpdatedEvent(NavigationUpdatedEventArgs obj)
@@ -500,7 +500,7 @@ namespace HoloToolkit.Unity.InputModule
 
         protected void OnNavigationCanceledEvent(NavigationCanceledEventArgs obj)
         {
-            inputManager.RaiseNavigationCanceled(this, (uint)obj.source.id, obj.normalizedOffset);
+            inputManager.RaiseNavigationCanceled(this, (uint)obj.source.id, Vector3.zero);
         }
 
         #endregion Raise GestureRecognizer Events

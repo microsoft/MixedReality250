@@ -47,7 +47,7 @@ namespace HoloToolkit.Unity.InputModule
             Camera.main.backgroundColor = Color.clear;
             Camera.main.nearClipPlane = HoloLensNearPlane;
            SetQuality(HoloLensQualityLevel);
-            UnityEngine.XR.WSA.HolographicSettings.ActivateLatentFramePresentation(true);
+          //  UnityEngine.XR.WSA.HolographicSettings.ActivateLatentFramePresentation(true);
         }
 
 #pragma warning disable 0618

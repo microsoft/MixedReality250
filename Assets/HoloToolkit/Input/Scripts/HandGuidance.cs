@@ -54,17 +54,18 @@ namespace HoloToolkit.Unity.InputModule
 
             // Register for hand and finger events to know where your hand
             // is being tracked and what state it is in.
-            InteractionManager.OnSourceLost += InteractionManager_OnSourceLost;
-            InteractionManager.OnSourceUpdated += InteractionManager_OnSourceUpdated;
-            InteractionManager.OnSourceReleased += InteractionManager_OnSourceReleased;
+            
+            InteractionManager.InteractionSourceLost += InteractionManager_OnSourceLost;
+            InteractionManager.InteractionSourceUpdated += InteractionManager_OnSourceUpdated;
+            InteractionManager.InteractionSourceReleased += InteractionManager_OnSourceReleased;
         }
 
-        private void InteractionManager_OnSourceReleased(SourceReleasedEventArgs obj)
+        private void InteractionManager_OnSourceReleased(InteractionSourceReleasedEventArgs obj)
         {
             RemoveTrackedHand(obj.state);
         }
 
-        private void InteractionManager_OnSourceUpdated(SourceUpdatedEventArgs obj)
+        private void InteractionManager_OnSourceUpdated(InteractionSourceUpdatedEventArgs obj)
         {
             UnityEngine.XR.WSA.Input.InteractionSourceState sourceState = obj.state;
 
@@ -96,7 +97,7 @@ namespace HoloToolkit.Unity.InputModule
             }
         }
 
-        private void InteractionManager_OnSourceLost(SourceLostEventArgs obj)
+        private void InteractionManager_OnSourceLost(InteractionSourceLostEventArgs obj)
         {
             RemoveTrackedHand(obj.state);
         }
@@ -160,9 +161,9 @@ namespace HoloToolkit.Unity.InputModule
         protected override void OnDestroy()
         {
             
-            UnityEngine.XR.WSA.Input.InteractionManager.OnSourceLost -= InteractionManager_OnSourceLost;
-            UnityEngine.XR.WSA.Input.InteractionManager.OnSourceUpdated -= InteractionManager_OnSourceUpdated;
-            UnityEngine.XR.WSA.Input.InteractionManager.OnSourceReleased -= InteractionManager_OnSourceReleased;
+            UnityEngine.XR.WSA.Input.InteractionManager.InteractionSourceLost -= InteractionManager_OnSourceLost;
+            UnityEngine.XR.WSA.Input.InteractionManager.InteractionSourceUpdated -= InteractionManager_OnSourceUpdated;
+            UnityEngine.XR.WSA.Input.InteractionManager.InteractionSourceReleased -= InteractionManager_OnSourceReleased;
 
             base.OnDestroy();
         }
