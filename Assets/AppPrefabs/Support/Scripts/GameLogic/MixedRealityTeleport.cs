@@ -22,6 +22,12 @@ public class MixedRealityTeleport : SingleInstance<MixedRealityTeleport> {
 
     void Update()
     {
+        // for HoloLens we don't allow manual camera control.  
+        if (UnityEngine.XR.WSA.HolographicSettings.IsDisplayOpaque == false)
+        {
+            return;
+        }
+
         // Check bumpers for coarse rotation
         float bumperRot = 0;
 
