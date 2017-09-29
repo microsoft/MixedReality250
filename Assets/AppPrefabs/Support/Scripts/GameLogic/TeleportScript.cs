@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using HoloToolkit.Unity.InputModule;
 using System;
+using HoloToolkit.Unity;
 
 public class TeleportScript : MonoBehaviour
 {
@@ -58,7 +59,7 @@ public class TeleportScript : MonoBehaviour
                     Vector3 goal = hitPos;
                     fadeControl.DoFade(0.25f, 0.5f, () =>
                     {
-                        warper.SetWorldPostion(goal);
+                        warper.SetWorldPosition(goal);
                         Debug.DrawLine(hitPos, goal);
                     }, null);
                 }

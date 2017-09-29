@@ -6,7 +6,9 @@ using UnityEngine;
 
 namespace HoloToolkit.Unity.InputModule
 {
-    // TODO: robertes: comment for HoloToolkit release.
+    /// <summary>
+    /// Script to register a Canvas component so it's capable of being focused at for 'point and commit' scenarios.
+    /// </summary>
     public class RegisterPointableCanvas :
         MonoBehaviour
     {
@@ -17,10 +19,6 @@ namespace HoloToolkit.Unity.InputModule
             if (canvas == null)
             {
                 Debug.LogErrorFormat("Object \"{0}\" is missing its canvas component.", name);
-            }
-            else if (FocusManager.Instance == null)
-            {
-                Debug.LogError("FocusManager is required.");
             }
             else
             {

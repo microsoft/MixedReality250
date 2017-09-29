@@ -103,19 +103,22 @@ public class UNetSharedHologram : NetworkBehaviour, IInputClickHandler
             Moving = !Moving;
             if (Moving)
             {
-                inputManager.OverrideFocusedObject = this.gameObject;
+                inputManager.AddGlobalListener(this.gameObject);
+               
                 if (SpatialMappingManager.Instance != null)
                 {
                     SpatialMappingManager.Instance.DrawVisualMeshes = true;
                 }
             }
             else
-            {                
-                inputManager.OverrideFocusedObject = null;
+            {
+                inputManager.RemoveGlobalListener(this.gameObject);
+               
                 if (SpatialMappingManager.Instance != null)
                 {
                     SpatialMappingManager.Instance.DrawVisualMeshes = false;
                 }
+
                 // Depending on if you are host or client, either setting the SyncVar (host) 
                 // or calling the Cmd (client) will update the other users in the session.
                 // So we have to do both.
@@ -126,6 +129,8 @@ public class UNetSharedHologram : NetworkBehaviour, IInputClickHandler
                     HoloToolkit.Examples.SharingWithUNET.PlayerController.Instance.SendSharedTransform(this.gameObject, localPosition, localRotation);
                 }
             }
+
+            eventData.Use();
         }
     }
 }

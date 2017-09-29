@@ -2,7 +2,7 @@
 
 This is the tutorial presented at //build2017.  Link to documentation is forthcoming. 
 
-**Current Unity Editor Project Version: Unity 2017.2b8 beta.**
+**Current Unity Editor Project Version: Unity 2017.2f2 beta.**
 
 ## Prerequisites:
 1. See [Development PC specs](https://developer.microsoft.com/en-us/windows/mixed-reality/install_the_tools#developing_for_immersive_headsets) for tips on developing for immersive headsets.

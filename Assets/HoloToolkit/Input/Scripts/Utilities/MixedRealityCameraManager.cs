@@ -7,65 +7,92 @@ namespace HoloToolkit.Unity.InputModule
     /// This script tells you if your head mounted display (HMD)
     /// is a transparent device or an occluded device.
     /// Based on those values, you can customize your camera settings.
+    /// It also fires an OnDisplayDetected event.
     /// </summary>
-    public class MixedRealityCameraManager : MonoBehaviour
+    public class MixedRealityCameraManager : Singleton<MixedRealityCameraManager>
     {
-#pragma warning disable 0618
-        // Unity has marked these as deprecated but we haven't found a better
-        // way to implement this functionality
-        public QualityLevel OpaqueQualityLevel;
-        public QualityLevel HoloLensQualityLevel;
-#pragma warning restore 0618
-        public float OpaqueNearPlane = 0.3f;
-        public float HoloLensNearPlane = 0.5f;
+        [Tooltip("The near clipping plane distance for an opaque display.")]
+        public float NearClipPlane_OpaqueDisplay = 0.3f;
 
-        void Start()
+        [Tooltip("Values for Camera.clearFlags, determining what to clear when rendering a Camera for an opaque display.")]
+        public CameraClearFlags CameraClearFlags_OpaqueDisplay = CameraClearFlags.Skybox;
+
+        [Tooltip("Background color for a transparent display.")]
+        public Color BackgroundColor_OpaqueDisplay = Color.black;
+
+        [Tooltip("Set the desired quality for your application for opaque display.")]
+        public int OpaqueQualityLevel;
+
+        [Tooltip("The near clipping plane distance for a transparent display.")]
+        public float NearClipPlane_TransparentDisplay = 0.85f;
+
+        [Tooltip("Values for Camera.clearFlags, determining what to clear when rendering a Camera for an opaque display.")]
+        public CameraClearFlags CameraClearFlags_TransparentDisplay = CameraClearFlags.SolidColor;
+
+        [Tooltip("Background color for a transparent display.")]
+        public Color BackgroundColor_TransparentDisplay = Color.clear;
+
+        [Tooltip("Set the desired quality for your application for HoloLens.")]
+        public int HoloLensQualityLevel;
+
+        public enum DisplayType
+        {
+            Opaque = 0,
+            Transparent
+        };
+
+        public DisplayType CurrentDisplayType { get; private set; }
+
+        public delegate void DisplayEventHandler(DisplayType displayType);
+        /// <summary>
+        /// Event is fired when a display is detected.
+        /// DisplayType enum value tells you if display is Opaque Vs Transparent.
+        /// </summary>
+        public event DisplayEventHandler OnDisplayDetected;
+
+        private void Start()
         {
             if (HolographicSettings.IsDisplayOpaque)
             {
+                CurrentDisplayType = DisplayType.Opaque;
                 ApplySettingsForOpaqueDisplay();
+                if (OnDisplayDetected != null)
+                {
+                    OnDisplayDetected(DisplayType.Opaque);
+                }
             }
             else
             {
+                CurrentDisplayType = DisplayType.Transparent;
                 ApplySettingsForTransparentDisplay();
+                if (OnDisplayDetected != null)
+                {
+                    OnDisplayDetected(DisplayType.Transparent);
+                }
             }
         }
-        
+
         public void ApplySettingsForOpaqueDisplay()
         {
             Debug.Log("Display is Opaque");
-            Camera.main.clearFlags = CameraClearFlags.Skybox;
-            Camera.main.nearClipPlane = OpaqueNearPlane;
-
+            Camera.main.clearFlags = CameraClearFlags_OpaqueDisplay;
+            Camera.main.nearClipPlane = NearClipPlane_OpaqueDisplay;
+            Camera.main.backgroundColor = BackgroundColor_OpaqueDisplay;
             SetQuality(OpaqueQualityLevel);
         }
 
         public void ApplySettingsForTransparentDisplay()
         {
             Debug.Log("Display is Transparent");
-            Camera.main.clearFlags = CameraClearFlags.SolidColor;
-            Camera.main.backgroundColor = Color.clear;
-            Camera.main.nearClipPlane = HoloLensNearPlane;
-           SetQuality(HoloLensQualityLevel);
-          //  UnityEngine.XR.WSA.HolographicSettings.ActivateLatentFramePresentation(true);
+            Camera.main.clearFlags = CameraClearFlags_TransparentDisplay;
+            Camera.main.backgroundColor = BackgroundColor_TransparentDisplay;
+            Camera.main.nearClipPlane = NearClipPlane_TransparentDisplay;
+            SetQuality(HoloLensQualityLevel);
         }
 
-#pragma warning disable 0618
-        private void SetQuality(QualityLevel level)
+        private static void SetQuality(int level)
         {
-            string levelString = level.ToString();
-            for(int index=0;index<QualitySettings.names.Length;index++)
-            {
-                if (levelString == QualitySettings.names[index])
-                {
-                    Debug.LogFormat("Level {0} is index {1}", levelString, index);
-                    QualitySettings.SetQualityLevel(index, false);
-                    return;
-                }
-            }
-
-            Debug.Log("Didn't find quality level " + levelString);
+            QualitySettings.SetQualityLevel(level, false);
         }
-#pragma warning restore 0618
     }
 }

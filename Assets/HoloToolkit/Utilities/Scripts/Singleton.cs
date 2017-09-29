@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using System;
 using UnityEngine;
 
 namespace HoloToolkit.Unity
@@ -16,7 +17,26 @@ namespace HoloToolkit.Unity
         {
             get
             {
+                if (instance == null)
+                {
+                    Debug.LogErrorFormat(
+                        "The {0} singleton instance is being accessed while it's null. Make sure it's included in"
+                            + " the scene, and your initialization/deinitialization sequence is compatible with"
+                            + " singletons. Consider inheriting from {1} for help with that.",
+                        typeof(T).Name,
+                        typeof(StartAwareBehaviour).Name
+                        );
+                }
+
                 return instance;
+            }
+        }
+
+        public static void AssertIsInitialized()
+        {
+            if (!IsInitialized)
+            {
+                Debug.LogAssertionFormat("The {0} singleton is required.", typeof(T).Name);
             }
         }
 
@@ -42,8 +62,7 @@ namespace HoloToolkit.Unity
             }
             else
             {
-                Debug.LogFormat("Creating a {0}", this.GetType());
-                instance = (T) this;
+                instance = (T)this;
             }
         }
 

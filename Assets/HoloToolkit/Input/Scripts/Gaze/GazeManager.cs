@@ -24,6 +24,12 @@ namespace HoloToolkit.Unity.InputModule
         public Vector3 HitPosition { get; private set; }
 
         /// <summary>
+        /// Normal of the point at which the gaze manager hit an object.
+        /// If no object is currently being hit, this will return the previous normal.
+        /// </summary>
+        public Vector3 HitNormal { get; private set; }
+
+        /// <summary>
         /// Origin of the gaze.
         /// </summary>
         public Vector3 GazeOrigin
@@ -67,10 +73,10 @@ namespace HoloToolkit.Unity.InputModule
         public BaseRayStabilizer Stabilizer = null;
 
         /// <summary>
-        /// Transform that should be used as the source of the gaze position and orientation.
+        /// Transform that should be used as the source of the gaze position and rotation.
         /// Defaults to the main camera.
         /// </summary>
-        [Tooltip("Transform that should be used to represent the gaze position and orientation. Defaults to Camera.Main")]
+        [Tooltip("Transform that should be used to represent the gaze position and rotation. Defaults to Camera.Main")]
         public Transform GazeTransform;
 
         [Tooltip("True to draw a debug view of the ray.")]
@@ -100,25 +106,34 @@ namespace HoloToolkit.Unity.InputModule
                 RaycastLayerMasks = new LayerMask[] { Physics.DefaultRaycastLayers };
             }
 
-            if (GazeTransform == null)
-            {
-                if (Camera.main != null)
-                {
-                    GazeTransform = Camera.main.transform;
-                }
-                else
-                {
-                    Debug.LogError("Gaze Manager was not given a GazeTransform and no main camera exists to default to.");
-                }
-            }
+            FindGazeTransform();
         }
 
         private void Update()
         {
+            if (!FindGazeTransform())
+            {
+                return;
+            }
+
             if (DebugDrawRay)
             {
                 Debug.DrawRay(GazeOrigin, (HitPosition - GazeOrigin), Color.white);
             }
+        }
+
+        private bool FindGazeTransform()
+        {
+            if (GazeTransform != null) { return true; }
+            
+            if (CameraCache.Main != null)
+            {
+                GazeTransform = CameraCache.Main.transform;
+                return true;
+            }
+
+            Debug.LogError("Gaze Manager was not given a GazeTransform and no main camera exists to default to.");
+            return false;
         }
 
         /// <summary>
@@ -175,6 +190,7 @@ namespace HoloToolkit.Unity.InputModule
             {
                 lastHitDistance = (focusDetails.Point - Ray.origin).magnitude;
                 UpdateHitPosition();
+                HitNormal = focusDetails.Normal;
             }
         }
 

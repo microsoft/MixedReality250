@@ -7,9 +7,11 @@ using UnityEngine.EventSystems;
 
 namespace HoloToolkit.Unity.InputModule
 {
-    // TODO: robertes: comment for HoloToolkit release.
-    public class InputSourcePointer :
-        IPointingSource
+    /// <summary>
+    /// Class implementing IPointingSource to demonstrate how to create a pointing source.
+    /// This is consumed by SimpleSinglePointerSelector.
+    /// </summary>
+    public class InputSourcePointer : IPointingSource
     {
         public IInputSource InputSource { get; set; }
 
@@ -43,7 +45,7 @@ namespace HoloToolkit.Unity.InputModule
             }
             else
             {
-                Debug.Assert(InputSource.SupportsInputInfo(InputSourceId, SupportedInputInfo.PointingRay));
+                Debug.Assert(InputSource.SupportsInputInfo(InputSourceId, SupportedInputInfo.Pointing));
 
                 InputSource.TryGetPointingRay(InputSourceId, out rawRay);
             }
@@ -56,22 +58,17 @@ namespace HoloToolkit.Unity.InputModule
 
         public bool OwnsInput(BaseEventData eventData)
         {
-            // TODO: robertes: consider dealing with voice specially.
-
+            // TODO: How do we handle voice here? Do we want to?
             return (OwnAllInput || InputIsFromSource(eventData));
         }
 
         public bool InputIsFromSource(BaseEventData eventData)
         {
-            // TODO: robertes: deal with the fact that Gestures come from a different source than InteractionManager input. Make
-            //       sure that gestures come with a sourceId that can be correlated with the rawInput IDs.
-
-            var inputData = (eventData as BaseInputEventData);
+            var inputData = (eventData as IInputSourceInfoProvider);
 
             return (inputData != null)
                 && (inputData.InputSource == InputSource)
-                && (inputData.SourceId == InputSourceId)
-                ;
+                && (inputData.SourceId == InputSourceId);
         }
     }
 }

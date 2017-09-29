@@ -314,7 +314,7 @@ public class LevelControl : NetworkBehaviour
     {
         if (warper != null)
         {
-            warper.SetWorldPostion(warper.transform.position + (updated - old) + Camera.main.transform.localPosition);
+            warper.SetWorldPosition(warper.transform.position + (updated - old) + Camera.main.transform.localPosition);
         }
     }
 
@@ -860,20 +860,20 @@ public class LevelControl : NetworkBehaviour
                     UAudioManager.Instance.PlayEvent("Teleport");
 
                   //  warper.AllowTeleport = Immersed;
-                    warper.ResetRotation();
+                  //  warper.ResetRotation();
                     SafetyColliders.SetActive(Immersed);
                     // setup the scene state based on if we are immersed or not.
                     if (Immersed)
                     {
                         transform.localScale = startScale * ImmersiveScale;
-                        warper.SetWorldPostion(currentStartTile.transform.position + Vector3.up * 0.8f * transform.localScale.y);
+                        warper.SetWorldPosition(currentStartTile.transform.position + Vector3.up * 0.8f * transform.localScale.y);
                         VRRoomControl.Instance.DisableControls();
                     }
                     else
                     {
                         transform.localScale = startScale;
-                        warper.ResetRotation();
-                        warper.SetWorldPostion(transform.position + transform.forward * -2.5f + Vector3.up * 0.25f);
+                     //   warper.ResetRotation();
+                        warper.SetWorldPosition(transform.position + transform.forward * -2.5f + Vector3.up * 0.25f);
                         VRRoomControl.Instance.EnableControls();
                     }
 

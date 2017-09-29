@@ -7,7 +7,9 @@ using UnityEngine.EventSystems;
 
 namespace HoloToolkit.Unity.InputModule
 {
-    // TODO: robertes: comment for HoloToolkit release.
+    /// <summary>
+    /// Implement this interface to register your pointer as a pointing source. This could be gaze based or motion controller based.
+    /// </summary>
     public interface IPointingSource
     {
         Ray Ray { get; }

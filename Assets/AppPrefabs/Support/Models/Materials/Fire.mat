@@ -11,6 +11,7 @@ Material:
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
@@ -83,5 +84,5 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 0.45943198, b: 0.04411763, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _Offset: {r: 0, g: -2.3304205, b: 0, a: 0}
+    - _Offset: {r: 0, g: -1.7399035, b: 0, a: 0}
     - _RimColor: {r: 1, g: 0.5298174, b: 0.102941155, a: 1}

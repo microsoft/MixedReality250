@@ -1,21 +1,19 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace HoloToolkit.Unity.InputModule
 {
     /// <summary>
-    /// An object which follows simplistic rules to choose 
+    /// Script shows how to create your own 'point and commit' style pointer which can steal cursor focus
+    /// using a pointing ray supported motion controller.
+    /// This class uses the InputSourcePointer to define the rules of stealing focus when a pointing ray is detected
+    /// with a motion controller that supports pointing.
     /// </summary>
-    // TODO: robertes: write up the rules once we see how they feel in action and finalize them.
-    // TODO: robertes: comment for HoloToolkit release.
     public class SimpleSinglePointerSelector :
         MonoBehaviour,
         ISourceStateHandler,
-        IInputClickHandler,
         IInputHandler
     {
         #region Settings
@@ -28,15 +26,15 @@ namespace HoloToolkit.Unity.InputModule
 
         [Tooltip("True to search for a cursor if one isn't explicitly set.")]
         public bool SearchForCursorIfUnset = true;
-        
+
         #endregion
 
         #region Data
 
-        private bool started = false;
+        private bool started;
 
-        private bool addedInputManagerListener = false;
-        private IPointingSource currentPointer = null;
+        private bool addedInputManagerListener;
+        private IPointingSource currentPointer;
 
         private readonly InputSourcePointer inputSourcePointer = new InputSourcePointer();
 
@@ -48,26 +46,15 @@ namespace HoloToolkit.Unity.InputModule
         {
             started = true;
 
-            if (InputManager.Instance == null)
-            {
-                Debug.LogError("InputManager is required.");
-            }
-
-            if (GazeManager.Instance == null)
-            {
-                Debug.LogError("GazeManager is required.");
-            }
-
-            if (FocusManager.Instance == null)
-            {
-                Debug.LogError("FocusManager is required.");
-            }
+            InputManager.AssertIsInitialized();
+            GazeManager.AssertIsInitialized();
+            FocusManager.AssertIsInitialized();
 
             AddInputManagerListenerIfNeeded();
             FindCursorIfNeeded();
             ConnectBestAvailablePointer();
-            
-            Debug.Assert(currentPointer != null);
+
+            Debug.Assert(currentPointer != null, this);
         }
 
         private void OnEnable()
@@ -89,11 +76,7 @@ namespace HoloToolkit.Unity.InputModule
 
         void ISourceStateHandler.OnSourceDetected(SourceStateEventData eventData)
         {
-            if (IsGazePointerActive && SupportsPointingRay(eventData.InputSource, eventData.SourceId))
-            {
-                AttachInputSourcePointer(eventData);
-                SetPointer(inputSourcePointer);
-            }
+            // Nothing to do on source detected.
         }
 
         void ISourceStateHandler.OnSourceLost(SourceStateEventData eventData)
@@ -102,11 +85,6 @@ namespace HoloToolkit.Unity.InputModule
             {
                 ConnectBestAvailablePointer();
             }
-        }
-
-        void IInputClickHandler.OnInputClicked(InputClickedEventData eventData)
-        {
-            HandleInputAction(eventData);
         }
 
         void IInputHandler.OnInputUp(InputEventData eventData)
@@ -146,21 +124,23 @@ namespace HoloToolkit.Unity.InputModule
             if ((Cursor == null) && SearchForCursorIfUnset)
             {
                 Debug.LogWarningFormat(
+                    this,
                     "Cursor hasn't been explicitly set on \"{0}.{1}\". We'll search for a cursor in the hierarchy, but"
                         + " that comes with a performance cost, so it would be best if you explicitly set the cursor.",
                     name,
                     GetType().Name
                     );
 
-                Cursor[] foundCursors = GameObject.FindObjectsOfType<Cursor>();
+                Cursor[] foundCursors = FindObjectsOfType<Cursor>();
 
                 if ((foundCursors == null) || (foundCursors.Length == 0))
                 {
-                    Debug.LogErrorFormat("Couldn't find cursor for \"{0}.{1}\".", name, GetType().Name);
+                    Debug.LogErrorFormat(this, "Couldn't find cursor for \"{0}.{1}\".", name, GetType().Name);
                 }
                 else if (foundCursors.Length > 1)
                 {
                     Debug.LogErrorFormat(
+                        this,
                         "Found more than one ({0}) cursors for \"{1}.{2}\", so couldn't automatically set one.",
                         foundCursors.Length,
                         name,
@@ -236,6 +216,7 @@ namespace HoloToolkit.Unity.InputModule
                 else
                 {
                     AttachInputSourcePointer(eventData);
+                    SetPointer(inputSourcePointer);
                     pointerWasChanged = true;
                 }
             }
@@ -278,7 +259,7 @@ namespace HoloToolkit.Unity.InputModule
 
         private bool SupportsPointingRay(IInputSource inputSource, uint sourceId)
         {
-            return inputSource.SupportsInputInfo(sourceId, SupportedInputInfo.PointingRay);
+            return inputSource.SupportsInputInfo(sourceId, SupportedInputInfo.Pointing);
         }
 
         private void AttachInputSourcePointer(BaseInputEventData eventData)
@@ -296,7 +277,7 @@ namespace HoloToolkit.Unity.InputModule
             inputSourcePointer.InputSource = inputSource;
             inputSourcePointer.InputSourceId = sourceId;
             inputSourcePointer.RayStabilizer = ControllerPointerStabilizer;
-            inputSourcePointer.OwnAllInput = true;
+            inputSourcePointer.OwnAllInput = false;
             inputSourcePointer.ExtentOverride = null;
             inputSourcePointer.PrioritizedLayerMasksOverride = null;
         }
@@ -308,7 +289,7 @@ namespace HoloToolkit.Unity.InputModule
 
         private bool IsGazePointerActive
         {
-            get { return object.ReferenceEquals(currentPointer, GazeManager.Instance); }
+            get { return ReferenceEquals(currentPointer, GazeManager.Instance); }
         }
 
         #endregion

@@ -5,7 +5,10 @@ using UnityEngine;
 
 namespace HoloToolkit.Unity.InputModule
 {
-    // TODO: robertes: comment for HoloToolkit release.
+    /// <summary>
+    /// FocusDetails struct contains information about which game object has the focus currently.
+    /// Also contains information about the normal of that point.
+    /// </summary>
     public struct FocusDetails
     {
         public Vector3 Point;

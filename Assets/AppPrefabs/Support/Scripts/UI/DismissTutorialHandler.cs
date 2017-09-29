@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using HoloToolkit.Unity.InputModule;
 using System;
+using HoloToolkit.Unity;
 
 public class DismissTutorialHandler : SingleInstance<DismissTutorialHandler> {
 
@@ -12,6 +13,7 @@ public class DismissTutorialHandler : SingleInstance<DismissTutorialHandler> {
     private float targetDistance = 2.0f;
     private Vector3 nextTargetPos;
     bool moving = false;
+    Vector3 prevCamPos = Vector3.zero;
     public void Start()
     {
         if (UIToShowWhenDisabled != null)
@@ -23,7 +25,9 @@ public class DismissTutorialHandler : SingleInstance<DismissTutorialHandler> {
         {
             targetDistance = 1.0f;
         }
+
         mainCamera = Camera.main;
+        prevCamPos = mainCamera.transform.position;
         nextTargetPos = mainCamera.transform.position + mainCamera.transform.forward * targetDistance;
         moving = true;
     }
@@ -33,12 +37,21 @@ public class DismissTutorialHandler : SingleInstance<DismissTutorialHandler> {
         if (UIToShowWhenDisabled != null)
         {
             UIToShowWhenDisabled.SetActive(true);
+            UIToShowWhenDisabled.transform.position = mainCamera.transform.position + mainCamera.transform.forward * targetDistance;
         }
         transform.gameObject.SetActive(false);
     }
 
     private void Update()
     {
+        if ((mainCamera.transform.position - prevCamPos).magnitude > 0.5f)
+        {
+            Debug.Log("Detected big camera move, just snapping");
+            transform.position = mainCamera.transform.position + mainCamera.transform.forward * targetDistance;
+        }
+
+        prevCamPos = mainCamera.transform.position;
+
         Vector3 targetPos = mainCamera.transform.position + mainCamera.transform.forward * targetDistance;
         if ((targetPos - transform.position).sqrMagnitude > 1.5f)
         {
@@ -62,6 +75,7 @@ public class DismissTutorialHandler : SingleInstance<DismissTutorialHandler> {
         {
             moving = false;
         }
+
         transform.LookAt(mainCamera.transform);
         transform.Rotate(Vector3.up * 180);
     }

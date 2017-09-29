@@ -326,7 +326,7 @@ namespace HoloToolkit.Examples.SharingWithUNET
                 Debug.Log("Ignoring empty name");
                 return false;
             }
-            
+#if UNITY_WSA
             UnityEngine.XR.WSA.Persistence.WorldAnchorStore anchorStore = WorldAnchorManager.Instance.AnchorStore;
             Debug.Log("Looking for " + CachedAnchorName);
             string[] ids = anchorStore.GetAllIds();
@@ -344,7 +344,7 @@ namespace HoloToolkit.Examples.SharingWithUNET
                     Debug.Log(ids[index]);
                 }
             }
-
+#endif
             // Didn't find the anchor.
             return false;
         }
@@ -398,12 +398,14 @@ namespace HoloToolkit.Examples.SharingWithUNET
 
         private void Anchor_OnTrackingChanged(WorldAnchor self, bool located)
         {
+#if UNITY_WSA
             if (located)
             {
                 AnchorEstablished = true;
                 WorldAnchorManager.Instance.AnchorStore.Save(AnchorName, self);
                 self.OnTrackingChanged -= Anchor_OnTrackingChanged;
             }
+#endif
         }
 
         /// <summary>
@@ -448,11 +450,12 @@ namespace HoloToolkit.Examples.SharingWithUNET
             {
                 return;
             }
-
+#if UNITY_WSA
             Debug.Log("Setting saved anchor to " + AnchorName);
             WorldAnchorManager.Instance.AnchorStore.Save(AnchorName, objectToAnchor.GetComponent<WorldAnchor>());
             PlayerPrefs.SetString(SavedAnchorKey, AnchorName);
             PlayerPrefs.Save();
+#endif
         }
 
         public void MakeNewAnchor()

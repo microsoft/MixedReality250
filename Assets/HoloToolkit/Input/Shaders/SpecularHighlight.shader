@@ -1,10 +1,8 @@
-﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
-//
+﻿//
 // Copyright (C) Microsoft. All rights reserved. 
 //
 
-Shader "HoloToolkit/SpecularHighlight"
+Shader "HoloToolkit/Obsolete/SpecularHighlight"
 {
     Properties
     {

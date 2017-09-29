@@ -33,8 +33,8 @@ namespace HoloToolkit.Unity.InputModule
         [Tooltip("Should the cursor be hidding when this object is focused.")]
         public bool HideCursorOnFocus = false;
 
-        [Tooltip("Cursor animation event to trigger when this object is gazed. Leave empty for none.")]
-        public string CursorTriggerName;
+        [Tooltip("Cursor animation parameters to set when this object is focused. Leave empty for none.")]
+        public AnimatorParameter[] CursorParameters;
 
         private void Awake()
         {

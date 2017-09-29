@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using HoloToolkit.Unity.InputModule;
 using System.Collections.Generic;
+using HoloToolkit.Unity;
 
 namespace HoloToolkit.Examples.SharingWithUNET
 {
@@ -159,8 +160,8 @@ namespace HoloToolkit.Examples.SharingWithUNET
                                 MixedRealityTeleport warper = MixedRealityTeleport.Instance;
                                 if (warper != null)
                                 {
-                                    warper.ResetRotation();
-                                    warper.SetWorldPostion(levelState.transform.position + levelState.transform.forward * -2.5f + Vector3.up * 0.25f + levelState.transform.transform.right * Random.Range(-2f, 2.0f));
+                                   // warper.ResetRotation();
+                                    warper.SetWorldPosition(levelState.transform.position + levelState.transform.forward * -2.5f + Vector3.up * 0.25f + levelState.transform.transform.right * Random.Range(-2f, 2.0f));
                                 }
                             }, null);
                     }
@@ -347,8 +348,8 @@ namespace HoloToolkit.Examples.SharingWithUNET
                                 MixedRealityTeleport warper = MixedRealityTeleport.Instance;
                                 if (warper != null)
                                 {
-                                    warper.ResetRotation();
-                                    warper.SetWorldPostion(levelState.transform.position + levelState.transform.forward * -2.5f + Vector3.up * 0.25f + levelState.transform.transform.right * Random.Range(-2f, 2.0f));
+                                    //warper.ResetRotation();
+                                    warper.SetWorldPosition(levelState.transform.position + levelState.transform.forward * -2.5f + Vector3.up * 0.25f + levelState.transform.transform.right * Random.Range(-2f, 2.0f));
                                 }
                             }, null);
                     }
