@@ -49,19 +49,28 @@ public class SetTutorialText : SingleInstance<SetTutorialText> {
         "rocket in the volcano will launch!\n";
 
     static string ImmersiveDeviceText2 = 
-        "Movement: \n" +
-        "     Hold Y - Show teleport marker\n" +
+        "Xbox Controller Movement: \n" +
+        "     Left Stick Up - Show teleport marker\n" +
         "       If the arrow on the teleport marker is spinning\n" +
         "       when you release Y, you will teleport there.\n" +
         "     A - Select\n" +
         "     X - Toggle Debug Window\n" +
-        "     Left/Right bumpers - Rotate\n";
+        "     Right Stick Left/Right - Rotate\n";
+
+    static string ImmersiveDeviceText3 =
+        "Motion Controller Movement: \n" +
+        "     Stick Up - Show teleport marker\n" +
+        "       If the arrow on the teleport marker is spinning\n" +
+        "       when you release, you will teleport there.\n" +
+        "     Trigger - Select\n" +
+        "     Stick Left/Right - Rotate\n";
 
     string[] ImmersiveTutorialScreens = new string[]
     {
         CommonHeaderText,
         ImmersiveDeviceText1,
         ImmersiveDeviceText2,
+        ImmersiveDeviceText3,
         CommonFooterText
 
     };
