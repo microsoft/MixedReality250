@@ -1,4 +1,4 @@
-﻿using HoloToolkit.Examples.SharingWithUNET;
+﻿using HoloToolkit.Unity.SharingWithUNET;
 using HoloToolkit.Unity;
 using System.Collections;
 using System.Collections.Generic;

@@ -4,12 +4,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-#if UNITY_EDITOR || UNITY_STANDALONE
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN
 using System.Net;
 using System.Net.Sockets;
 #endif
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace HoloToolkit.Unity.SpatialMapping
 {
@@ -26,7 +25,7 @@ namespace HoloToolkit.Unity.SpatialMapping
         [Tooltip("The connection port on the machine to use.")]
         public int ConnectionPort = 11000;
 
-#if UNITY_EDITOR || UNITY_STANDALONE
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN
         /// <summary>
         /// Listens for network connections over TCP.
         /// </summary> 
@@ -90,21 +89,27 @@ namespace HoloToolkit.Unity.SpatialMapping
                     // Pass the data to the mesh serializer. 
                     List<Mesh> meshes = new List<Mesh>(SimpleMeshSerializer.Deserialize(dataBuffer));
 
+                    if (meshes.Count > 0)
+                    {
+                        // Use the network-based mapping source to receive meshes in the Unity editor.
+                        SpatialMappingManager.Instance.SetSpatialMappingSource(this);
+                    }
+
                     // For each mesh, create a GameObject to render it.
                     for (int index = 0; index < meshes.Count; index++)
                     {
-                        GameObject surface = AddSurfaceObject(meshes[index], string.Format("Beamed-{0}", SurfaceObjects.Count), transform);
-                        surface.transform.parent = SpatialMappingManager.Instance.transform;
+                        int meshID = SurfaceObjects.Count;
 
-                        if (SpatialMappingManager.Instance.DrawVisualMeshes == false)
-                        {
-                            surface.GetComponent<MeshRenderer>().enabled = false;
-                        }
+                        SurfaceObject surface = CreateSurfaceObject(
+                            mesh: meshes[index],
+                            objectName: "Beamed-" + meshID,
+                            parentObject: transform,
+                            meshID: meshID
+                            );
 
-                        if (SpatialMappingManager.Instance.CastShadows == false)
-                        {
-                            surface.GetComponent<MeshRenderer>().shadowCastingMode = ShadowCastingMode.Off;
-                        }
+                        surface.Object.transform.parent = SpatialMappingManager.Instance.transform;
+
+                        AddSurfaceObject(surface);
                     }
 
                     // Finally disconnect.

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
-using HoloToolkit.Examples.SharingWithUNET;
+using HoloToolkit.Unity.SharingWithUNET;
 using HoloToolkit.Unity;
 
 public class ScrollingSessionListUIController : SingleInstance<ScrollingSessionListUIController>

@@ -64,7 +64,6 @@ MonoBehaviour:
   m_OffsetX: 0
   m_OffsetY: 0
   BroadcastInterval: 1000
-  LocalIp: 
 --- !u!114 &114993542530132652
 MonoBehaviour:
   m_ObjectHideFlags: 1

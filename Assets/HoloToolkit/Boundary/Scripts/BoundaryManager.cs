@@ -1,10 +1,13 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR;
+
+#if UNITY_WSA
+using System.Collections.Generic;
 using UnityEngine.XR.WSA;
+using UnityEngine.XR;
+#endif
 
 namespace HoloToolkit.Unity.Boundary
 {
@@ -18,10 +21,12 @@ namespace HoloToolkit.Unity.Boundary
         public GameObject FloorQuad;
         private GameObject floorQuadInstance;
 
+#if UNITY_WSA
         [SerializeField]
         [Tooltip("Approximate max Y height of your space.")]
         private float boundaryHeight = 10f;
         private Bounds boundaryBounds;
+#endif
 
         private bool renderFloor = true;
         public bool RenderFloor
@@ -74,6 +79,7 @@ namespace HoloToolkit.Unity.Boundary
             }
         }
 
+#if UNITY_WSA
         private void Awake()
         {
             // Render the floor based on if you are in editor or immersive device.
@@ -105,33 +111,30 @@ namespace HoloToolkit.Unity.Boundary
             {
                 floorQuadInstance = Instantiate(FloorQuad);
 
-#if UNITY_EDITOR
-                // So the floor quad does not occlude in editor testing, draw it lower.
-                floorQuadInstance.transform.localPosition = new Vector3(0, -3, 0);
-#else
-                // Inside immersive headset draw floor quad at Y value of dimensions.
-                Vector3 dimensions;
-                // TODO: BUG: Unity: TryGetDimensions does not return true either.
-                //if (UnityEngine.Experimental.XR.Boundary.TryGetDimensions(out dimensions,
-                //UnityEngine.Experimental.XR.Boundary.Type.TrackedArea))
-                if (UnityEngine.Experimental.XR.Boundary.TryGetDimensions(out dimensions,
-                    UnityEngine.Experimental.XR.Boundary.Type.TrackedArea))
+                if (!XRDevice.isPresent)
                 {
-                    Debug.Log("Got dimensions of tracked area.");
-                    if (dimensions != null)
-                    {
-                        Debug.Log("Drawing floor at dimensions Y.");
-                        // Draw the floor at boundary Y.
-                        floorQuadInstance.transform.localPosition = new Vector3(0, dimensions.y, 0);
-                    }
+                    // So the floor quad does not occlude in editor testing, draw it lower.
+                    floorQuadInstance.transform.localPosition = new Vector3(0, -3, 0);
                 }
                 else
                 {
-                    Debug.Log("Drawing floor at 0,0,0.");
-                    // Draw the floor at 0,0,0.
-                    floorQuadInstance.transform.localPosition = Vector3.zero;
+                    // Inside immersive headset draw floor quad at Y value of dimensions.
+                    Vector3 dimensions;
+                    // TODO: BUG: Unity: TryGetDimensions does not return true either.
+                    //if (UnityEngine.Experimental.XR.Boundary.TryGetDimensions(out dimensions,
+                    //UnityEngine.Experimental.XR.Boundary.Type.TrackedArea))
+                    if (UnityEngine.Experimental.XR.Boundary.TryGetDimensions(out dimensions,
+                        UnityEngine.Experimental.XR.Boundary.Type.TrackedArea))
+                    {
+                        Debug.Log("Got dimensions of tracked area.  Drawing floor at height offset: " + dimensions.y);
+                        floorQuadInstance.transform.localPosition = new Vector3(0, dimensions.y, 0);
+                    }
+                    else
+                    {
+                        Debug.Log("Drawing floor at 0,0,0.");
+                        floorQuadInstance.transform.localPosition = Vector3.zero;
+                    }
                 }
-#endif
                 floorQuadInstance.SetActive(true);
             }
         }
@@ -190,5 +193,6 @@ namespace HoloToolkit.Unity.Boundary
             // Ensuring that we set height of the bounds volume to be say 10 feet tall.
             boundaryBounds.Encapsulate(new Vector3(0, boundaryHeight, 0));
         }
+#endif
     }
 }
