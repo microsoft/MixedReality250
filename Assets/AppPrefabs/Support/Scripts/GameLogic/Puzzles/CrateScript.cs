@@ -20,22 +20,22 @@ public class CrateScript : MonoBehaviour, IInputClickHandler
 
     public void OnInputClicked(InputClickedEventData eventData)
     {
-        if (levelState.Immersed)
-        {
+        //if (levelState.Immersed)
+        //{
             if (cratePuzzle.CrateClicked(this.gameObject))
             {
                 atGoal = true;
                 AnimationStartTime = Time.realtimeSinceStartup;
                 UAudioManager.Instance.PlayEvent("Box_Tap", this.gameObject);
             }
-        }
+        //}
     }
 
     // Use this for initialization
     void Start()
     {
         startLocalPos = transform.localPosition;
-        levelState = LevelControl.Instance;
+        //levelState = LevelControl.Instance;
         goalLocalPosY = startLocalPos;
         goalLocalPosY.y = goalLocalPos.y;
     }

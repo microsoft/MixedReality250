@@ -4,7 +4,7 @@ using UnityEngine;
 using HoloToolkit.Unity.InputModule;
 using System;
 
-using HoloToolkit.Examples.SharingWithUNET;
+using HoloToolkit.Unity.SharingWithUNET;
 public class SessionListButton : MonoBehaviour, IInputClickHandler {
 
     public NetworkDiscoveryWithAnchors.SessionInfo SessionInfo { get; private set; }

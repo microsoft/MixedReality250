@@ -4,8 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Coin
-  - Floor
+  - Explode
+  - Fire
   layers:
   - Default
   - TransparentFX
@@ -37,8 +37,8 @@ TagManager:
   - 
   - 
   - 
-  - ShadowBox
-  - SpatialMapping
+  - 
+  - 
   m_SortingLayers:
   - name: Default
     uniqueID: 0

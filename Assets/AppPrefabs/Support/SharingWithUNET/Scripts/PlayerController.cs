@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 using HoloToolkit.Unity.InputModule;
 using System.Collections.Generic;
 using HoloToolkit.Unity;
+using HoloToolkit.Unity.SharingWithUNET;
 
 namespace HoloToolkit.Examples.SharingWithUNET
 {

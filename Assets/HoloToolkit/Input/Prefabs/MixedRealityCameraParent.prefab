@@ -42,7 +42,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1372541880982678
 GameObject:
   m_ObjectHideFlags: 0
@@ -89,12 +89,12 @@ GameObject:
   - component: {fileID: 4931155170010354}
   - component: {fileID: 114710303647202208}
   m_Layer: 0
-  m_Name: Controllers
+  m_Name: MotionControllers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1498836839153776
 GameObject:
   m_ObjectHideFlags: 1
@@ -232,8 +232,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4541142303025740}
+  - component: {fileID: 114059824862712730}
   - component: {fileID: 114812681035175298}
-  - component: {fileID: 114125583548929660}
   m_Layer: 0
   m_Name: MixedRealityCameraParent
   m_TagString: Untagged
@@ -594,11 +594,22 @@ MonoBehaviour:
   UseUnscaledTime: 1
   axisType: 0
   buttonType: 21
-  InputManagerHorizontalAxisName: ControllerRightStickX
-  InputManagerVerticalAxisName: ControllerRightStickY
+  InputManagerHorizontalAxisName: CONTROLLER_RIGHT_STICK_HORIZONTAL
+  InputManagerVerticalAxisName: CONTROLLER_RIGHT_STICK_VERTICAL
   Axis0Destination: 0
   Axis1Destination: 4
   Axis2Destination: 6
+--- !u!114 &114059824862712730
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1850730992894404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cae8f3c88e9704a4393cb8d904b62372, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114061490341948574
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -643,17 +654,6 @@ MonoBehaviour:
   Axis0Destination: 5
   Axis1Destination: 4
   Axis2Destination: 6
---- !u!114 &114125583548929660
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1850730992894404}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efd9011d7631986429c3dfed32d63bf7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114129378875773704
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -850,8 +850,8 @@ MonoBehaviour:
   UseUnscaledTime: 1
   axisType: 0
   buttonType: 21
-  InputManagerHorizontalAxisName: LeftTrigger
-  InputManagerVerticalAxisName: RightTrigger
+  InputManagerHorizontalAxisName: CONTROLLER_LEFT_TRIGGER
+  InputManagerVerticalAxisName: CONTROLLER_RIGHT_TRIGGER
   Axis0Destination: 2
   Axis1Destination: 3
   Axis2Destination: 6
@@ -890,8 +890,8 @@ MonoBehaviour:
   UseUnscaledTime: 1
   axisType: 0
   buttonType: 21
-  InputManagerHorizontalAxisName: ControllerLeftStickX
-  InputManagerVerticalAxisName: ControllerLeftStickY
+  InputManagerHorizontalAxisName: CONTROLLER_LEFT_STICK_HORIZONTAL
+  InputManagerVerticalAxisName: CONTROLLER_LEFT_STICK_VERTICAL
   Axis0Destination: 2
   Axis1Destination: 0
   Axis2Destination: 6

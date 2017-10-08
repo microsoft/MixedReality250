@@ -9,9 +9,7 @@ namespace UnityStandardAssets.Utility
 {
     public class AutoMobileShaderSwitch : MonoBehaviour
     {
-#if UNITY_IPHONE || UNITY_ANDROID || UNITY_WP8 || UNITY_TIZEN || UNITY_STV
         [SerializeField] private ReplacementList m_ReplacementList;
-#endif
 
         // Use this for initialization
         private void OnEnable()

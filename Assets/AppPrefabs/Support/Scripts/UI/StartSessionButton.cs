@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using HoloToolkit.Unity.InputModule;
 using UnityEngine;
-using HoloToolkit.Examples.SharingWithUNET;
+using HoloToolkit.Unity.SharingWithUNET;
 
 public class StartSessionButton : MonoBehaviour, IInputClickHandler {
 
