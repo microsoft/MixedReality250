@@ -12,15 +12,15 @@ public class NumPadButton : MonoBehaviour, IInputClickHandler {
 
     public void OnInputClicked(InputClickedEventData eventData)
     {
-        if(levelState.Immersed)
-        {
+        //if(levelState.Immersed)
+        //{
             parentNumpad.ButtonHit(ButtonLabel);
-        }
+        //}
     }
 
     // Use this for initialization
     void Start () {
-        levelState = LevelControl.Instance;
+        //levelState = LevelControl.Instance;
     }
 	
 	

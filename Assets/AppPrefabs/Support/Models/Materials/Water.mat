@@ -128,7 +128,7 @@ Material:
     m_Colors:
     - _Color: {r: 0.041522488, g: 0.09535425, b: 0.17647058, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _Offset: {r: 0, g: -0.563318, b: 0, a: 0}
+    - _Offset: {r: 0, g: -3.4572637, b: 0, a: 0}
     - _RimColor: {r: 0.12705448, g: 0.24818033, b: 0.36764705, a: 1}
     - _SpecColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _TextureScaleOffset: {r: 1, g: 1, b: 0, a: 0}
