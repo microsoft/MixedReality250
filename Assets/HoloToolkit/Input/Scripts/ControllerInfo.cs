@@ -59,6 +59,39 @@ namespace HoloToolkit.Unity.InputModule
         private Vector2 lastTouchpadPosition;
         private double lastSelectPressedAmount;
 
+        private LineRenderer lineRenderer;
+
+        private Material lineMaterial;
+        public Material LineMaterial
+        {
+            get
+            {
+                return lineMaterial;
+            }
+            set
+            {
+                if (lineMaterial != value)
+                {
+                    lineMaterial = value;
+                    if (lineRenderer != null)
+                    {
+                        lineRenderer.material = lineMaterial;
+                    }
+                }
+            }
+        }
+
+        private void Awake()
+        {
+            lineRenderer = gameObject.AddComponent<LineRenderer>();
+            lineRenderer.positionCount = 2;
+            lineRenderer.SetPosition(0, transform.position);
+            lineRenderer.SetPosition(1, transform.position);
+            lineRenderer.startWidth = 0.01f;
+            lineRenderer.endWidth = 0.001f;
+            lineRenderer.material = lineMaterial;
+            lineRenderer.enabled = false;
+        }
         /// <summary>
         /// Iterates through the Transform array to find specifically named GameObjects.
         /// These GameObjects specify the animation bounds and the GameObject to modify for button,
@@ -294,6 +327,13 @@ namespace HoloToolkit.Unity.InputModule
 
                 lastTouchpadPosition = newTouchpadPosition;
             }
+        }
+
+        public void AnimatePointerRay(bool IsActivePointer, Vector3 PointerWorldPos)
+        {
+            lineRenderer.enabled = IsActivePointer;
+            lineRenderer.SetPosition(0, transform.position);
+            lineRenderer.SetPosition(1, PointerWorldPos);
         }
 
         private void SetLocalPositionAndRotation(GameObject buttonGameObject, Transform newTransform)

@@ -41,6 +41,10 @@ namespace HoloToolkit.Unity.InputModule
         [SerializeField]
         protected UnityEngine.Material GLTFMaterial;
 
+        [Tooltip("This material will be used on the line cast from the model.")]
+        [SerializeField]
+        protected UnityEngine.Material LineRayMaterial;
+
 #if !UNITY_EDITOR && UNITY_WSA
         // This is used to get the renderable controller model, since Unity does not expose this API.
         private SpatialInteractionManager spatialInteractionManager;
@@ -261,6 +265,7 @@ namespace HoloToolkit.Unity.InputModule
             ControllerInfo currentController;
             if (AnimateControllerModel && controllerDictionary != null && controllerDictionary.TryGetValue(obj.state.source.id, out currentController))
             {
+                bool drawPointerRay = false;
                 currentController.AnimateSelect(obj.state.selectPressedAmount);
 
                 if (obj.state.source.supportsGrasp)
@@ -276,6 +281,7 @@ namespace HoloToolkit.Unity.InputModule
                 if (obj.state.source.supportsThumbstick)
                 {
                     currentController.AnimateThumbstick(obj.state.thumbstickPressed, obj.state.thumbstickPosition);
+                    drawPointerRay = Mathf.Abs(obj.state.thumbstickPosition.y) < 0.5f;
                 }
 
                 if (obj.state.source.supportsTouchpad)
@@ -284,18 +290,40 @@ namespace HoloToolkit.Unity.InputModule
                 }
 
                 Vector3 newPosition;
-                if (obj.state.sourcePose.TryGetPosition(out newPosition, InteractionSourceNode.Grip))
+                if (obj.state.sourcePose.TryGetPosition(out newPosition, InteractionSourceNode.Pointer))
                 {
                     currentController.gameObject.transform.localPosition = newPosition;
                 }
 
                 Quaternion newRotation;
+                if (obj.state.sourcePose.TryGetRotation(out newRotation, InteractionSourceNode.Pointer))
+                {
+                    currentController.gameObject.transform.localRotation = newRotation;
+                }
+
+                
+                RaycastHit rch;
+                Vector3 pointerTarget = currentController.gameObject.transform.position + currentController.gameObject.transform.forward * 30.0f;
+                if (Physics.Raycast(currentController.gameObject.transform.position, currentController.transform.forward, out rch))
+                {
+                    pointerTarget = rch.point;
+                }
+
+                currentController.AnimatePointerRay(drawPointerRay, pointerTarget);
+
                 if (obj.state.sourcePose.TryGetRotation(out newRotation, InteractionSourceNode.Grip))
                 {
                     currentController.gameObject.transform.localRotation = newRotation;
                 }
+
+                if (obj.state.sourcePose.TryGetPosition(out newPosition, InteractionSourceNode.Grip))
+                {
+                    currentController.gameObject.transform.localPosition = newPosition;
+                }
+
             }
         }
+
 
         private void FinishControllerSetup(GameObject controllerModelGameObject, string handedness, uint id)
         {
@@ -311,6 +339,7 @@ namespace HoloToolkit.Unity.InputModule
             if (AnimateControllerModel)
             {
                 newControllerInfo.LoadInfo(controllerModelGameObject.GetComponentsInChildren<Transform>(), this);
+                newControllerInfo.LineMaterial = LineRayMaterial;
             }
             controllerDictionary.Add(id, newControllerInfo);
         }

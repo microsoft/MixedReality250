@@ -76,7 +76,10 @@ namespace HoloToolkit.Unity.InputModule
 
         void ISourceStateHandler.OnSourceDetected(SourceStateEventData eventData)
         {
-            // Nothing to do on source detected.
+            if (!IsInputSourcePointerActive || IsGazePointerActive)
+            {
+                ConnectBestAvailablePointer();
+            }
         }
 
         void ISourceStateHandler.OnSourceLost(SourceStateEventData eventData)

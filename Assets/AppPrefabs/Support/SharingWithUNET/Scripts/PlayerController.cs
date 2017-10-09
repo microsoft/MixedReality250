@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 using HoloToolkit.Unity.InputModule;
 using System.Collections.Generic;
 using HoloToolkit.Unity;
+using UnityEngine.XR.WSA.Input;
 
 namespace HoloToolkit.Examples.SharingWithUNET
 {
@@ -233,6 +234,17 @@ namespace HoloToolkit.Examples.SharingWithUNET
             Debug.LogFormat("{0} {1} share", PlayerName, SharesSpatialAnchors ? "does" : "does not");
         }
 
+        public void SetRequireAllPaths(bool require)
+        {
+            CmdSetRequireAllPaths(require);
+        }
+
+        [Command]
+        private void CmdSetRequireAllPaths(bool require)
+        {
+            levelState.SetRequireAllPaths(require);
+        }
+
         [Command]
         private void CmdUpdateAnchorName(string UpdatedName)
         {
@@ -360,6 +372,44 @@ namespace HoloToolkit.Examples.SharingWithUNET
                     Invoke("DeferredAnchorOwnerCheck", 2.0f);
                     
                 }
+
+                if (UnityEngine.XR.WSA.HolographicSettings.IsDisplayOpaque)
+                {
+                    InteractionManager.InteractionSourceUpdated += InteractionManager_InteractionSourceUpdated;
+                }
+            }
+        }
+
+        int boltFrame=0;
+        private void InteractionManager_InteractionSourceUpdated(InteractionSourceUpdatedEventArgs obj)
+        {
+            if (obj.state.source.supportsGrasp && obj.state.grasped && (Time.frameCount - boltFrame > 20))
+            {
+                boltFrame = Time.frameCount;
+                Vector3 boltStart;
+                if (!obj.state.sourcePose.TryGetPosition(out boltStart, InteractionSourceNode.Pointer))
+                {
+                    return;
+                }
+
+                
+                Vector3 boltDirection;
+                if (!obj.state.sourcePose.TryGetForward(out boltDirection, InteractionSourceNode.Pointer))
+                {
+                    return;
+                }
+
+                Vector3 boltTarget = boltStart + boltDirection * 15.0f;
+                Transform LevelTransform = levelState.transform;
+
+                boltStart = MixedRealityTeleport.Instance.transform.TransformPoint(boltStart);
+                boltTarget = MixedRealityTeleport.Instance.transform.TransformPoint(boltTarget);
+                CmdSetupBolt(LevelTransform.InverseTransformPoint(boltTarget), LevelTransform.InverseTransformPoint(boltStart));
+            }
+
+            if (obj.state.source.supportsMenu && obj.state.menuPressed)
+            {
+                ResetPosition();
             }
         }
 
@@ -470,10 +520,24 @@ namespace HoloToolkit.Examples.SharingWithUNET
                 }
             }
 
+            if (!SharesSpatialAnchors)
+            {
+                if (Input.GetButtonUp("XBOX_VIEW"))
+                {
+                    ResetPosition();
+                }
+            }
+
             BoltCheck();
         }
 
-
+        public void ResetPosition()
+        {
+            if (PathIndex >= 0)
+            {
+                levelState.ResetPosition();
+            }
+        }
 
         private void BoltCheck()
         {
@@ -482,23 +546,28 @@ namespace HoloToolkit.Examples.SharingWithUNET
                 UnityEngine.XR.WSA.Input.InteractionSourceState[] sources = UnityEngine.XR.WSA.Input.InteractionManager.GetCurrentReading();
                 if (sources != null && sources.Length == 2)
                 {
-                    if (sources[0].source.kind == UnityEngine.XR.WSA.Input.InteractionSourceKind.Hand && sources[1].source.kind == UnityEngine.XR.WSA.Input.InteractionSourceKind.Hand)
+                     if (sources[0].source.kind == UnityEngine.XR.WSA.Input.InteractionSourceKind.Hand && sources[1].source.kind == UnityEngine.XR.WSA.Input.InteractionSourceKind.Hand)
                     {
+                       
                         Vector3 p1 = Vector3.zero;
                         Vector3 p2 = Vector3.zero;
-                        
+
                         if (sources[0].sourcePose.TryGetPosition(out p1) && sources[1].sourcePose.TryGetPosition(out p2)
                             && p1 != Vector3.zero && p2 != Vector3.zero)
                         {
                             float distBetweenHands = (p1 - p2).magnitude;
-                            if (distBetweenHands < 0.1f)
+                            float targetDist = 0.1f;
+                            
+                            if (distBetweenHands < targetDist)
                             {
                                 Transform LevelTransform = levelState.transform;
                                 if (LevelTransform != null)
                                 {
                                     Vector3 boltStart = (p1 + p2) * 0.5f;
-                                    CmdSetupBolt(LevelTransform.InverseTransformPoint(GazeManager.Instance.HitPosition), LevelTransform.InverseTransformPoint(boltStart));
-                                } 
+                                    Vector3 boltTarget = GazeManager.Instance.HitPosition;
+
+                                    CmdSetupBolt(LevelTransform.InverseTransformPoint(boltTarget), LevelTransform.InverseTransformPoint(boltStart));
+                                }
                             }
                         }
                     }

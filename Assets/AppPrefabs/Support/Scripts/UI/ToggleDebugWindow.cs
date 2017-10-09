@@ -3,6 +3,7 @@
 
 using UnityEngine;
 using HoloToolkit.Unity.InputModule;
+using UnityEngine.XR.WSA.Input;
 
 public class ToggleDebugWindow : MonoBehaviour, IInputClickHandler
 {
@@ -12,8 +13,22 @@ public class ToggleDebugWindow : MonoBehaviour, IInputClickHandler
     // Use this for initialization
 	void Start ()
     {
+        if (UnityEngine.XR.WSA.HolographicSettings.IsDisplayOpaque)
+        {
+            InteractionManager.InteractionSourceUpdated += InteractionManager_InteractionSourceUpdated;
+        }
         UpdateChildren();
 	}
+
+    int resetFrame = 0;
+    private void InteractionManager_InteractionSourceUpdated(InteractionSourceUpdatedEventArgs obj)
+    {
+        if (obj.state.source.supportsThumbstick && obj.state.thumbstickPressed && Time.frameCount - resetFrame > 30)
+        {
+            resetFrame = Time.frameCount;
+            OnInputClicked(null);
+        }
+    }
 
     private void Update()
     {
@@ -21,6 +36,8 @@ public class ToggleDebugWindow : MonoBehaviour, IInputClickHandler
         {
             OnInputClicked(null);
         }
+
+        
     }
 
     public void OnInputClicked(InputClickedEventData eventData)

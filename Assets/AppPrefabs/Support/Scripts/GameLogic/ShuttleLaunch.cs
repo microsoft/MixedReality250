@@ -61,8 +61,8 @@ public class ShuttleLaunch : MonoBehaviour {
 
         CeilingHole.SetActive(true);
         CeilingRift.SetActive(false);
-       // Vector3 CeilingPos = new Vector3(CeilingRift.transform.position.x, CeilingRift.transform.position.y + ceilingHeight, CeilingRift.transform.position.z);
-        CeilingRift.transform.localPosition += Vector3.up * ceilingHeight * 5;
+        // Vector3 CeilingPos = new Vector3(CeilingRift.transform.position.x, CeilingRift.transform.position.y + ceilingHeight, CeilingRift.transform.position.z);
+        CeilingRift.transform.localPosition = new Vector3(CeilingRift.transform.localPosition.x, ceilingHeight * 5, CeilingRift.transform.localPosition.z);
 
         curLaunchStage = launchStage.start;
 
@@ -289,7 +289,8 @@ public class ShuttleLaunch : MonoBehaviour {
         Smoke.SetActive(false);
        // Atmosphere.transform.position = new Vector3(0,0,0);
         Atmosphere.SetActive(false);
-      //  CeilingRift.transform.position = new Vector3(0, 0, 0);
+        //  CeilingRift.transform.position = new Vector3(0, 0, 0);
+        CeilingRift.transform.localPosition = new Vector3(CeilingRift.transform.localPosition.x, ceilingHeight * 5, CeilingRift.transform.localPosition.z);
         CeilingRift.SetActive(false);
         CeilingHole.SetActive(true);
         curLaunchStage = launchStage.waiting;
@@ -297,7 +298,9 @@ public class ShuttleLaunch : MonoBehaviour {
         Destroy(FuelThruster2.GetComponent<Rigidbody>());
         Destroy(FuelTank.GetComponent<Rigidbody>());
         FuelThruster1.transform.parent = Shuttle.transform;
+        
         FuelThruster2.transform.parent = Shuttle.transform;
+        
         FuelTank.transform.parent = Shuttle.transform;
         siloDoor1.transform.localPosition = siloDoor1StartPos;
         siloDoor2.transform.localPosition = siloDoor2StartPos;
@@ -308,14 +311,16 @@ public class ShuttleLaunch : MonoBehaviour {
 
         FuelTank.transform.localPosition = FuelTankStartPos;
         FuelTank.transform.localRotation = FuelTankStartRot;
+        FuelTank.transform.localScale = Vector3.one;
 
         FuelThruster1.transform.localPosition = FuelThruster1StartPos;
         FuelThruster1.transform.localRotation = FuelThruster1StartRot;
-        
+        FuelThruster1.transform.localScale = Vector3.one;
+
         FuelThruster2.transform.localPosition = FuelThruster2StartPos;
         FuelThruster2.transform.localRotation = FuelThruster2StartRot;
+        FuelThruster2.transform.localScale = Vector3.one;
 
-       
         Start();
     }
 }

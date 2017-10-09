@@ -8,15 +8,17 @@ using HoloToolkit.Examples.SharingWithUNET;
 
 public class ResetAnchorButton : MonoBehaviour, IInputClickHandler {
 
+    int resetFrame = 0;
     public void OnInputClicked(InputClickedEventData eventData)
     {
-        if (NetworkDiscoveryWithAnchors.Instance.isServer)
+        if (UnityEngine.XR.WSA.HolographicSettings.IsDisplayOpaque == false && NetworkDiscoveryWithAnchors.Instance.isServer)
         {
             UNetAnchorManager.Instance.MakeNewAnchor();
+            eventData.Use();
         }
         else
         {
-            Debug.Log("Only the server for now");
+            Debug.Log("Only the server on hololens for now");
         }
     }
 

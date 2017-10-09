@@ -328,6 +328,12 @@ namespace HoloToolkit.Unity.InputModule
         /// </summary>
         protected virtual void UpdateCursorTransform()
         {
+            if (Pointer == null)
+            {
+                Debug.Log("No pointer");
+                return;
+            }
+                
             FocusDetails focusDetails = FocusManager.Instance.GetFocusDetails(Pointer);
             GameObject newTargetedObject = focusDetails.Object;
 
@@ -443,7 +449,7 @@ namespace HoloToolkit.Unity.InputModule
         /// <param name="eventData"></param>
         public virtual void OnSourceDetected(SourceStateEventData eventData)
         {
-            if (Pointer.OwnsInput(eventData))
+            if (Pointer != null && Pointer.OwnsInput(eventData))
             {
                 visibleHandsCount++;
                 IsHandVisible = true;
