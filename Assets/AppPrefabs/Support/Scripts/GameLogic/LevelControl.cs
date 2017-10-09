@@ -911,6 +911,8 @@ public class LevelControl : NetworkBehaviour
         return -1;
     }
 
+    private int DeferredPathIndex = -1;
+
     /// <summary>
     /// sets the path index for the local player
     /// </summary>
@@ -953,6 +955,18 @@ public class LevelControl : NetworkBehaviour
 
                 }, null);
         }
+        else if(fadeScript != null && fadeScript.Busy)
+        {
+            DeferredPathIndex = pathIndex;
+            Debug.Log("Warping later");
+            Invoke("DeferredPosition", 1.0f);
+        }
+    }
+
+    private void DeferredPosition()
+    {
+        Debug.Log("Attempting deferred warp to " + DeferredPathIndex);
+        SetPathIndex(DeferredPathIndex);
     }
 
     // If the user gets stuck in the world, this puts them back to the beginning of their path.
