@@ -8,7 +8,7 @@ using UnityEngine.XR.WSA;
 public class StabalizationPlaneFallback : MonoBehaviour {
 
     public float VisibilitySafeFactor = 0.1f;
-    // Use this for initialization
+    
     void Start ()
     {
 		if (GazeManager.Instance != null && GazeManager.Instance.GetComponent<StabilizationPlaneModifier>() != null)
@@ -18,7 +18,6 @@ public class StabalizationPlaneFallback : MonoBehaviour {
         }
 	}
 	
-	// Update is called once per frame
 	void Update ()
     {
         if (IsTargetVisible())
