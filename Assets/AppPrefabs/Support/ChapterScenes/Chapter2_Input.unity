@@ -214,6 +214,24 @@ Prefab:
       propertyPath: m_RootOrder
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 1493965172262900, guid: d29bc40b7f3df26479d6a0aac211c355, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114710303647202208, guid: d29bc40b7f3df26479d6a0aac211c355,
+        type: 2}
+      propertyPath: AnimateControllerModel
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114710303647202208, guid: d29bc40b7f3df26479d6a0aac211c355,
+        type: 2}
+      propertyPath: LineRayMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: ed1b89d39279f564ea077ad8e46f3595, type: 2}
+    - target: {fileID: 1127525123306568, guid: d29bc40b7f3df26479d6a0aac211c355, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d29bc40b7f3df26479d6a0aac211c355, type: 2}
   m_IsPrefabParent: 0
@@ -296,7 +314,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4205989549047814, guid: 97d3f3ae75810e040a8388953868bb61, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4205989549047814, guid: 97d3f3ae75810e040a8388953868bb61, type: 2}
       propertyPath: m_LocalPosition.z
@@ -461,7 +479,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4848804039258158, guid: 979515e9eae4b49489a26f48f412fde7, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -0.7
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4848804039258158, guid: 979515e9eae4b49489a26f48f412fde7, type: 2}
       propertyPath: m_LocalPosition.z
@@ -526,6 +544,15 @@ Prefab:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4264142132015072, guid: 3eddd1c29199313478dd3f912bfab2ab, type: 2}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114902642943532050, guid: 3eddd1c29199313478dd3f912bfab2ab,
+        type: 2}
+      propertyPath: NavigateAroundYAxisName
+      value: CONTROLLER_LEFT_STICK_VERTICAL
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000011656901714, guid: 3eddd1c29199313478dd3f912bfab2ab, type: 2}
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
