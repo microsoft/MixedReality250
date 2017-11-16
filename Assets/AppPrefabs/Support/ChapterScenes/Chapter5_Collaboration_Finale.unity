@@ -286,6 +286,11 @@ Prefab:
       value: 
       objectReference: {fileID: 1138339379675406, guid: 21a2f18b3d775184fb3b5e3eb63d770a,
         type: 2}
+    - target: {fileID: 114089264199067956, guid: 0fc628c0aaea3a149bc2e7e3ac97990f,
+        type: 2}
+      propertyPath: EnableCollaboration
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0fc628c0aaea3a149bc2e7e3ac97990f, type: 2}
   m_IsPrefabParent: 0
